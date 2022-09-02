@@ -74,6 +74,12 @@ SPRITES.BILLBOARDS = [SPRITES.BILLBOARD01, SPRITES.BILLBOARD02, SPRITES.BILLBOAR
 SPRITES.PLANTS     = [SPRITES.TREE1, SPRITES.TREE2, SPRITES.DEAD_TREE1, SPRITES.DEAD_TREE2, SPRITES.PALM_TREE, SPRITES.BUSH1, SPRITES.BUSH2, SPRITES.CACTUS, SPRITES.STUMP, SPRITES.BOULDER1, SPRITES.BOULDER2, SPRITES.BOULDER3];
 SPRITES.CARS       = [SPRITES.CAR01, SPRITES.CAR02, SPRITES.CAR03, SPRITES.CAR04, SPRITES.SEMI, SPRITES.TRUCK];
 
+var engineSound1 = new Audio("./audio/engine1.mp3");
+var engineSound2 = new Audio("./audio/engine2.mp3");
+var engineSound3 = new Audio("./audio/engine3.mp3");
+var engineSound4 = new Audio("./audio/engine4.mp3");
+var crashSound = new Audio("./audio/crash.mp3");
+
 var fps = 60;                      // how many 'update' frames per second
 var step = 0.4 / fps;                   // how long is each frame (in seconds)
 var width = 1024;                    // logical canvas width
@@ -123,6 +129,9 @@ var offRoadLimit = maxSpeed / 4;             // limit when off road deceleration
 var totalCars = 200;                     // total number of cars on the road
 var currentLapTime = 0;                       // current lap time
 var lastLapTime = null;                    // last lap time
+var crashToObstacle = false;
+var timeSinceCrash = 0;
+var crashTimer = 200;
 
 var keyLeft = false;
 var keyRight = false;

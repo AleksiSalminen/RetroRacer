@@ -15,6 +15,14 @@ function update(dt) {
 
     position = Util.increase(position, dt * speed, trackLength);
 
+    if (crashToObstacle && timeSinceCrash < crashTimer) {
+        timeSinceCrash++;
+    }
+    else if (crashToObstacle && timeSinceCrash >= crashTimer) {
+        crashToObstacle = false;
+        timeSinceCrash = 0;
+    }
+
     if (keyLeft)
         playerX = playerX - dx;
     else if (keyRight)
@@ -40,7 +48,12 @@ function update(dt) {
             spriteW = sprite.source.w * SPRITES.SCALE;
             if (Util.overlap(playerX, playerW, sprite.offset + spriteW / 2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
                 speed = speedCap / 5;
-                position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // stop in front of sprite (at front of segment)
+                position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // Crashes to an obstacle
+                if (!crashToObstacle) {
+                    crashToObstacle = true;
+                    timeSinceCrash = 0;
+                    Game.playCrashSound();
+                }
                 break;
             }
         }
@@ -52,7 +65,12 @@ function update(dt) {
         if (speed > car.speed) {
             if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
                 speed = car.speed * (car.speed / speed);
-                position = Util.increase(car.z, -playerZ, trackLength);
+                position = Util.increase(car.z, -playerZ, trackLength); // Crashes to another vehicle
+                if (!crashToObstacle) {
+                    crashToObstacle = true;
+                    timeSinceCrash = 0;
+                    Game.playCrashSound();
+                }
                 break;
             }
         }
@@ -87,7 +105,9 @@ function update(dt) {
         }
     }
 
-    updateHud('speed', 5 * Math.round(speed / 500));
+    updateEngineSound(speedPercent);
+
+    updateHud('speed', 5 * Math.round(speed / 500) * 1.6);
     updateHud('current_lap_time', formatTime(currentLapTime));
 }
 
@@ -172,4 +192,37 @@ function formatTime(dt) {
         return minutes + "." + (seconds < 10 ? "0" : "") + seconds + "." + tenths;
     else
         return seconds + "." + tenths;
+}
+
+//-------------------------------------------------------------------------
+
+function updateEngineSound(speedPercent) {
+    engineSound1.playbackRate = 0.5;
+    engineSound1.volume = speedPercent/3;
+    var buffer = 1;
+    if(engineSound1.currentTime > engineSound1.duration - buffer){
+        engineSound1.currentTime = 0;
+        engineSound1.play();
+    }
+
+    engineSound2.playbackRate = speedPercent*5 + 2;
+    var buffer = 0.2;
+    if(engineSound2.currentTime > engineSound2.duration - buffer){
+        engineSound2.currentTime = 0;
+        engineSound2.play();
+    }
+
+    engineSound3.playbackRate = speedPercent*2 + 1;
+    var buffer = 1;
+    if(engineSound3.currentTime > engineSound3.duration - buffer){
+        engineSound3.currentTime = 0;
+        engineSound3.play();
+    }
+
+    engineSound4.volume = speedPercent/3;
+    var buffer = 0.5;
+    if(engineSound4.currentTime > engineSound4.duration - buffer){
+        engineSound4.currentTime = 0;
+        engineSound4.play();
+    }
 }

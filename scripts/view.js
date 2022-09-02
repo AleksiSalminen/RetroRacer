@@ -97,6 +97,10 @@ function render() {
         }
     }
 
+    if (crashToObstacle) {
+        crashShake(timeSinceCrash, speed / speedCap);
+    }
+
     postShake();
 
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
@@ -107,11 +111,19 @@ function preShake(speedPercent) {
     ctx.save();
     var dx = Math.random()*shake;
     var dy = Math.random()*shake;
-    ctx.translate(dx, dy);  
+    ctx.translate(dx, dy); 
 }
 
 function postShake() {
     ctx.restore();
+}
+
+function crashShake(timeSinceCrash, speedPercent) {
+    var ratio = timeSinceCrash/crashTimer;
+    ctx.globalAlpha = 1 - ratio;
+    ctx.fillStyle = 'rgb(100,0,0)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1.0;
 }
 
 function findSegment(z) {

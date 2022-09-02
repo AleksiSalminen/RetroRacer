@@ -36,6 +36,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
             }
             frame(); // lets get this party started
             Game.playMusic();
+            Game.playEngineSound();
         });
     },
 
@@ -87,9 +88,40 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
             }
         }
         var music = new Audio(src);
+        //music.preservesPitch = false;
+        music.playbackRate = 1.1;
         music.loop = true;
-        music.volume = 0.2;
+        music.volume = 0.5;
         music.play();
+    },
+
+    //---------------------------------------------------------------------------
+
+    playEngineSound: function () {
+        engineSound1.preservesPitch = false;
+        engineSound1.volume = 0.1;
+        engineSound1.play();
+
+        engineSound2.preservesPitch = false;
+        engineSound2.volume = 0.1;
+        engineSound2.play();
+
+        engineSound3.preservesPitch = false;
+        engineSound3.volume = 0.3;
+        engineSound3.play();
+
+        engineSound4.preservesPitch = false;
+        engineSound4.volume = 0.05;
+        engineSound4.play();
+    },
+
+    //---------------------------------------------------------------------------
+
+    playCrashSound: function () {
+        crashSound.currentTime = 0;
+        crashSound.playbackRate = 1.5;
+        crashSound.volume = 0.4;
+        crashSound.play();
     }
 
 }
