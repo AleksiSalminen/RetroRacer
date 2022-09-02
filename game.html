@@ -2,9 +2,8 @@
 
 <html>
 <head>
-  <title>2.5D Car Racing Game</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link href="common.css" rel="stylesheet" type="text/css" />
+  <link href="./styles/common.css" rel="stylesheet" type="text/css" />
 </head> 
 
 <body> 
@@ -16,21 +15,23 @@
       <span id="fast_lap_time"    class="hud">Fastest Lap: <span id="fast_lap_time_value" class="value">0.0</span></span>
     </div>
     <canvas id="canvas">
-      Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
+      This game cannot be run because your browser does not support the &lt;HTML Canvas&gt; element
     </canvas>
     Loading...
   </div>
+  
 
-  <audio id='music'>
-    <source src="music/racer.ogg">
-    <source src="music/racer.mp3">
-  </audio>
+  <!-- Import map settings scripts -->
+  <script src="./maps/forest_hills/map.js"></script>
+  <script src="./maps/city/map.js"></script>
 
-  <script src="maps/forest_hills/map.js"></script>
-  <script src="maps/city/map.js"></script>
-  <script src="stats.js"></script>
-  <script src="common.js"></script>
-  <script src="game.js"></script>
+  <!-- Import the main scripts -->
+  <script src="./scripts/handler.js"></script>
+  <script src="./scripts/helper.js"></script>
+  <script src="./scripts/updater.js"></script>
+  <script src="./scripts/graphics.js"></script>
+  <script src="./scripts/view.js"></script>
+  <script src="./scripts/game.js"></script>
 
 </body> 
 </html>
