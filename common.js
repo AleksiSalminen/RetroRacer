@@ -291,7 +291,7 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  sprite: function(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY) {
+  sprite: function(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY, speedPercent) {
 
                     //  scale for projection AND relative to roadWidth (for tweakUI)
     var destW  = (sprite.w * scale * width/2) * (SPRITES.SCALE * roadWidth);
@@ -301,9 +301,27 @@ var Render = {
     destY = destY + (destH * (offsetY || 0));
 
     var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
-    if (clipH < destH)
+    if (clipH < destH) {
       ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX, destY, destW, destH - clipH);
-
+      if (speedPercent && speedPercent > 0.5 && speedPercent <= 0.8) {
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX-2, destY, destW, destH - clipH);
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX+2, destY, destW, destH - clipH);
+        ctx.globalAlpha = 1;
+      }
+      else if (speedPercent && speedPercent > 0.8 && speedPercent <= 0.95) {
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX-3, destY, destW, destH - clipH);
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX+3, destY, destW, destH - clipH);
+        ctx.globalAlpha = 1;
+      }
+      else if (speedPercent && speedPercent > 0.95) {
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX-5, destY, destW, destH - clipH);
+        ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX+5, destY, destW, destH - clipH);
+        ctx.globalAlpha = 1;
+      }
+    }
   },
 
   //---------------------------------------------------------------------------
@@ -317,7 +335,7 @@ var Render = {
       sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_RIGHT : SPRITES.PLAYER_RIGHT;
     else
       sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
-
+    
     scale = 0.000335;
     Render.sprite(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
   },
@@ -398,12 +416,12 @@ var SPRITES = {
   CAR02:                  { x: 1383, y:  825, w:   80, h:   59 },
   CAR04:                  { x: 1383, y:  894, w:   80, h:   57 },
   CAR01:                  { x: 1205, y: 1018, w:   80, h:   56 },
-  PLAYER_UPHILL_LEFT:     { x:  868, y: 1084, w:  624, h:  403 },
+  PLAYER_UPHILL_LEFT:     { x:  870, y: 1597, w:  624, h:  403 },
   PLAYER_UPHILL_STRAIGHT: { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_UPHILL_RIGHT:    { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_LEFT:            { x:  868, y: 1084, w:  624, h:  403 },
+  PLAYER_UPHILL_RIGHT:    { x:    0, y: 1597, w:  624, h:  403 },
+  PLAYER_LEFT:            { x:  870, y: 1597, w:  624, h:  403 },
   PLAYER_STRAIGHT:        { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_RIGHT:           { x:  868, y: 1084, w:  624, h:  403 }
+  PLAYER_RIGHT:           { x:    0, y: 1597, w:  624, h:  403 }
 };
 
 SPRITES.SCALE = 0.3 * (1/80) // the reference sprite width should be 1/3rd the (half-)roadWidth
