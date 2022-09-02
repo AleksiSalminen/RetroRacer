@@ -1,4 +1,7 @@
 
+var searchParams = window.location.search.substring(1).split('&');
+var map = searchParams[0].split('=')[1];
+
 var fps = 60;                      // how many 'update' frames per second
 var step = 0.4 / fps;                   // how long is each frame (in seconds)
 var width = 1024;                    // logical canvas width
@@ -534,7 +537,7 @@ function resetCars() {
 
 Game.run({
     canvas: canvas, render: render, update: update, stats: stats, step: step,
-    images: ["background", "sprites"],
+    images: ["../maps/"+map+"/background", "../maps/"+map+"/sprites"],
     keys: [
         { keys: [KEY.LEFT, KEY.A], mode: 'down', action: function () { keyLeft = true; } },
         { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function () { keyRight = true; } },
