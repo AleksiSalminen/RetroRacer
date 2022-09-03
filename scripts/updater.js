@@ -227,6 +227,27 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
         return 0;
 }
 
+function resetCars() {
+    cars = [];
+    var n, car, segment, offset, z, sprite, speed, calc;
+    for (var n = 0; n < totalCars; n++) {
+        offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
+        z = Math.floor(0 * segments.length) * segmentLength;
+        sprite = Util.randomChoice(SPRITES.CARS);
+        calc = Math.floor(Math.random() * (oCarSpeedTop-oCarSpeedLow))+ oCarSpeedLow;
+        speed = speedCap * (calc/100);
+        car = { offset: offset, z: z, sprite: sprite, speed: speed };
+        segment = findSegment(car.z);
+        segment.cars.push(car);
+        cars.push(car);
+    }
+    cars.sort((a,b) => (a.speed > b.speed) ? -1 : ((b.speed > a.speed) ? 1 : 0))
+    let i = 1;
+    cars.forEach(function (car) {
+        car.place = i; i++;
+    });
+}
+
 //-------------------------------------------------------------------------
 
 function updateHud(key, value) { // accessing DOM can be slow, so only do it if value has changed

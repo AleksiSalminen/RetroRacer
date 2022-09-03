@@ -129,7 +129,7 @@ maps.push({
         this.addDownhillToEnd();
 
         this.resetSprites();
-        this.resetCars();
+        resetCars();
 
         segments[findSegment(playerZ).index + 2].color = this.COLORS.START;
         segments[findSegment(playerZ).index + 3].color = this.COLORS.START;
@@ -184,27 +184,6 @@ maps.push({
 
         }
 
-    },
-
-    resetCars: function () {
-        cars = [];
-        var n, car, segment, offset, z, sprite, speed, calc;
-        for (var n = 0; n < totalCars; n++) {
-            offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
-            z = Math.floor(0 * segments.length) * segmentLength;
-            sprite = Util.randomChoice(SPRITES.CARS);
-            calc = Math.floor(Math.random() * (oCarSpeedTop-oCarSpeedLow))+ oCarSpeedLow;
-            speed = speedCap * (calc/100);
-            car = { offset: offset, z: z, sprite: sprite, speed: speed };
-            segment = findSegment(car.z);
-            segment.cars.push(car);
-            cars.push(car);
-        }
-        cars.sort((a,b) => (a.speed > b.speed) ? -1 : ((b.speed > a.speed) ? 1 : 0))
-        let i = 1;
-        cars.forEach(function (car) {
-            car.place = i; i++;
-        });
     }
 
 });
