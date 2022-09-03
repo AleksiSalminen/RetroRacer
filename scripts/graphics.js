@@ -146,6 +146,41 @@ var Render = {
         }
     },
 
+    //---------------------------------------------------------------------------
+
+    data: function (ctx, place) {
+        if (place) {
+            var countHeight = 60;
+            ctx.fillStyle = "black";
+            ctx.globalAlpha = 0.4;
+            ctx.fillRect(0, 0, canvas.width, countHeight);
+            ctx.globalAlpha = 1.0;
+            ctx.fillStyle = 'white';
+            ctx.font = "50px Arial";
+            ctx.fillText(place, canvas.width/2-90, 50);
+            ctx.font = "30px Arial";
+            ctx.fillText("/"+(cars.length+1), canvas.width/2, 50);
+            ctx.fillText("Lap:", 10, 40);
+            ctx.font = "50px Arial";
+            ctx.fillText(lap, 70, 50);
+        }
+    },
+
+    //---------------------------------------------------------------------------
+
+    countdown: function (ctx, count) {
+        var countWidth = 500;
+        var countHeight = 200;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            canvas.width/2-countWidth/2, canvas.height/2-countHeight, 
+            countWidth, countHeight
+        );
+        ctx.fillStyle = 'white';
+        ctx.font = "100px Arial";
+        ctx.fillText(Math.ceil(count/100), canvas.width/2-25, canvas.height/2-countHeight/3);
+    },
+    
     rumbleWidth: function (projectedRoadWidth, lanes) { return projectedRoadWidth / Math.max(6, 2 * lanes); },
     laneMarkerWidth: function (projectedRoadWidth, lanes) { return projectedRoadWidth / Math.max(32, 8 * lanes); }
 

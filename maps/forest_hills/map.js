@@ -188,11 +188,11 @@ maps.push({
 
     resetCars: function () {
         cars = [];
-        totalCars = 199;
+        totalCars = 99;
         var n, car, segment, offset, z, sprite, speed;
         for (var n = 0; n < totalCars; n++) {
             offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
-            z = Math.floor(Math.random() * segments.length) * segmentLength;
+            z = 0;
             sprite = Util.randomChoice(SPRITES.CARS);
             speed = speedCap / 4 + Math.random() * speedCap / (sprite == SPRITES.SEMI ? 4 : 2);
             car = { offset: offset, z: z, sprite: sprite, speed: speed };
@@ -200,7 +200,6 @@ maps.push({
             segment.cars.push(car);
             cars.push(car);
         }
-        cars.sort(function(a, b){return b.z-a.z});
         let i = 1;
         cars.forEach(function (car) {
             car.place = i; i++;

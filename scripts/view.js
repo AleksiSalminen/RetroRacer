@@ -22,7 +22,7 @@ function render() {
     var playerPercent = Util.percentRemaining(position + playerZ, segmentLength);
     var playerY = Util.interpolate(playerSegment.p1.world.y, playerSegment.p2.world.y, playerPercent);
     var maxy = height;
-
+    
     var x = 0;
     var dx = - (baseSegment.curve * basePercent);
 
@@ -77,8 +77,10 @@ function render() {
             spriteX = Util.interpolate(segment.p1.screen.x, segment.p2.screen.x, car.percent) + (spriteScale * car.offset * roadWidth * width / 2);
             spriteY = Util.interpolate(segment.p1.screen.y, segment.p2.screen.y, car.percent);
             Render.sprite(ctx, width, height, resolution, roadWidth, sprites, car.sprite, spriteScale, spriteX, spriteY, -0.5, -1, segment.clip, speed / speedCap);
-            let dist = 40;
-            Render.place(ctx, car.place, dist, spriteX, spriteY);
+            if (car.place < place && car.place >= place-5) {
+                let dist = 40;
+                Render.place(ctx, car.place, dist, spriteX, spriteY);
+            }
         }
 
         for (i = 0; i < segment.sprites.length; i++) {
@@ -106,6 +108,13 @@ function render() {
     postShake();
 
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
+
+    if (!playing) {
+        Render.countdown(ctx, countDown);
+    }
+    else {
+        Render.data(ctx, place);
+    }
 }
 
 function preShake(speedPercent) {

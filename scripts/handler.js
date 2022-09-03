@@ -33,7 +33,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
                 last = now;
                 requestAnimationFrame(frame, canvas);
             }
-            frame(); // lets get this party started
+            frame();
             Game.playMusic();
             Game.playEngineSound();
         });
