@@ -146,7 +146,6 @@ function update(dt) {
     else if (countDown <= startCount) {
         playing = true;
         hasControl = true;
-        console.log(cars);
     }
     else {
         countDown--;

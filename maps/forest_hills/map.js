@@ -188,13 +188,13 @@ maps.push({
 
     resetCars: function () {
         cars = [];
-        totalCars = 99;
-        var n, car, segment, offset, z, sprite, speed;
+        var n, car, segment, offset, z, sprite, speed, calc;
         for (var n = 0; n < totalCars; n++) {
             offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
             z = Math.floor(0 * segments.length) * segmentLength;
             sprite = Util.randomChoice(SPRITES.CARS);
-            speed = speedCap / 4 + Math.random() * speedCap / (sprite == SPRITES.SEMI ? 4 : 2);
+            calc = Math.floor(Math.random() * (oCarSpeedTop-oCarSpeedLow))+ oCarSpeedLow;
+            speed = speedCap * (calc/100);
             car = { offset: offset, z: z, sprite: sprite, speed: speed };
             segment = findSegment(car.z);
             segment.cars.push(car);

@@ -6,6 +6,16 @@ document.title = 'Retro Racing Game';
 
 var searchParams = window.location.search.substring(1).split('&');
 var map = searchParams[0].split('=')[1];
+var mode = searchParams[1].split('=')[1];
+var lap = 1;
+var laps = parseInt(searchParams[2].split('=')[1]);
+var playerSpeedPercent = parseFloat(searchParams[3].split('=')[1] / 100);
+var oCarSpeedLow = parseInt(searchParams[4].split('=')[1]);
+var oCarSpeedTop = parseInt(searchParams[5].split('=')[1]);
+if (oCarSpeedLow > oCarSpeedTop) {
+  var spd = oCarSpeedLow; oCarSpeedLow = oCarSpeedTop; oCarSpeedTop = spd;
+}
+var totalCars = parseInt(searchParams[6].split('=')[1]);
 
 var KEY = {
   LEFT:  37,
@@ -87,8 +97,6 @@ var continueCount = 0;
 var continueCountdown = 1000;
 var startCount = 0;
 var countDown = 500;
-var lap = 1;
-var laps = 1;
 var place;
 var finishedPlace;
 var fps = 60;                      // how many 'update' frames per second
@@ -130,14 +138,13 @@ var fogDensity = 5;                       // exponential fog density
 var position = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
 var speed = 0;                       // current speed
 var speedCap = segmentLength / step;      // speed cap (ensure we can't move more than 1 segment in a single frame to make collision detection easier)
-var maxSpeed = speedCap * 0.95;              // max speed of the car
+var maxSpeed = speedCap * playerSpeedPercent;  // max speed of the car
 var accel = 3999;             // acceleration rate - tuned until it 'felt' right
 var breaking = -maxSpeed;               // deceleration rate when braking
 var turning = 2;
 var decel = 0;             // 'natural' deceleration rate when neither accelerating, nor braking
 var offRoadDecel = -maxSpeed / 2;             // off road deceleration is somewhere in between
 var offRoadLimit = maxSpeed / 4;             // limit when off road deceleration no longer applies (e.g. you can always go at least this speed even when off road)
-var totalCars = 200;                     // total number of cars on the road
 var currentLapTime = 0;                       // current lap time
 var lastLapTime = null;                    // last lap time
 var crashToObstacle = false;
