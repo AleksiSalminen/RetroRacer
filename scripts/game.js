@@ -25,7 +25,8 @@ var KEY = {
   A:     65,
   D:     68,
   S:     83,
-  W:     87
+  W:     87,
+  ESC:   27
 };
 
 var COLORS = {};
@@ -95,6 +96,7 @@ var engineSound3 = new Audio("./audio/engine3.mp3");
 var engineSound4 = new Audio("./audio/engine4.mp3");
 var crashSound = new Audio("./audio/crash.mp3");
 
+var paused = false;
 var playing = false;
 var hasControl = false;
 var finished = false;
@@ -175,6 +177,8 @@ Dom.get("volume").addEventListener('input', function () {
   updateSound();
 }, false);
 
+Dom.get("restartLink").href = window.location.href;
+
 //=========================================================================
 // THE GAME LOOP
 //=========================================================================
@@ -190,7 +194,8 @@ Game.run({
         { keys: [KEY.LEFT, KEY.A], mode: 'up', action: function () { keyLeft = false; } },
         { keys: [KEY.RIGHT, KEY.D], mode: 'up', action: function () { keyRight = false; } },
         { keys: [KEY.UP, KEY.W], mode: 'up', action: function () { keyFaster = false; } },
-        { keys: [KEY.DOWN, KEY.S], mode: 'up', action: function () { keySlower = false; } }
+        { keys: [KEY.DOWN, KEY.S], mode: 'up', action: function () { keySlower = false; } },
+        { keys: [KEY.DOWN, KEY.ESC], mode: 'down', action: function () { Game.pause(); } }
     ],
     ready: function (images) {
         background = images[0];

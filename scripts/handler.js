@@ -39,6 +39,10 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
         });
     },
 
+    pause: function () {
+        paused = !paused;
+    },
+
     //---------------------------------------------------------------------------
 
     loadImages: function (names, callback) { // load multiple images and callback when ALL images have loaded

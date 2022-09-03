@@ -28,7 +28,7 @@ function render() {
 
     ctx.clearRect(0, 0, width, height);
 
-    if (screenShakeOn) {
+    if (screenShakeOn && !paused) {
         preShake(speed / speedCap);
     }
 
@@ -107,7 +107,7 @@ function render() {
         crashShake(timeSinceCrash, speed / speedCap);
     }
 
-    if (screenShakeOn) {
+    if (screenShakeOn && !paused) {
         postShake();
     }
 
@@ -121,6 +121,9 @@ function render() {
     }
     else if (wrecked) {
         Render.wrecked(ctx);
+    }
+    else if (paused) {
+        Render.paused(ctx);
     }
     else {
         Render.data(ctx, place);

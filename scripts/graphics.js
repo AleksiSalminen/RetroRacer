@@ -126,7 +126,7 @@ var Render = {
 
     player: function (ctx, width, height, resolution, roadWidth, sprites, speedPercent, scale, destX, destY, steer, updown) {
         var bounce = 0;
-        if (screenShakeOn) {
+        if (screenShakeOn && !paused) {
             bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 4;
         }
         scale = 0.000335;
@@ -267,6 +267,26 @@ var Render = {
         ctx.font = "35px Arial";
         var text2 = "Continue in " + Math.ceil(continueCountdown/100)
         ctx.fillText(text2, canvas.width/2-100, canvas.height/2-countHeight/3+50);
+    
+        Render.data(ctx, finishedPlace);
+    },
+
+    //---------------------------------------------------------------------------
+
+    paused: function (ctx) {
+        var countHeight = 200;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            0, canvas.height/2-countHeight, 
+            canvas.width, countHeight
+        );
+
+        ctx.fillStyle = 'white';
+        ctx.font = "100px Arial";
+        var text = "Paused"
+        ctx.fillText(text, canvas.width/2-180, canvas.height/2-countHeight/3);
+    
+        Render.data(ctx, place);
     },
 
     //---------------------------------------------------------------------------

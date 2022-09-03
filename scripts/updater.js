@@ -3,7 +3,10 @@
 //=========================================================================
 
 function update(dt) {
-    if (playing) {
+    if (paused) {
+        // Skip everything
+    }
+    else if (playing) {
         var n, car, carW, sprite, spriteW;
         var playerSegment = findSegment(position + playerZ);
         var playerW = 80 * SPRITES.SCALE;
@@ -313,4 +316,5 @@ function muteSound() {
 
 function updateSound() {
     music.volume = 0.5 * volume/100
+    updateEngineSound(speed/maxSpeed);
 }
