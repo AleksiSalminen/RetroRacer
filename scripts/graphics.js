@@ -202,6 +202,26 @@ var Render = {
             ctx.fillText(lap, 70, 50);
             ctx.font = "30px Arial";
             ctx.fillText("/" + laps, 130, 50);
+
+            var circles = 9;
+            var strain = Math.floor(speed / maxSpeed * circles);
+            var circleColor;
+            if      (strain >= 9) { circleColor = "red";    }
+            else if (strain >= 6)  { circleColor = "orange"; }
+            else                    { circleColor = "green";  }
+            
+            ctx.globalAlpha = 0.6;
+            for (var i = 0;i < circles;i++) {
+                ctx.beginPath();
+                ctx.arc(canvas.width/2-90+i*20, 100, 6, 0, 2 * Math.PI, false);
+                if (i < strain) { ctx.fillStyle = circleColor; }
+                else  { ctx.fillStyle = "black"; }
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#003300';
+                ctx.stroke();
+            }
+            ctx.globalAlpha = 1.0;
         }
     },
 
