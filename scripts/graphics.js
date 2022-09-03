@@ -98,7 +98,10 @@ var Render = {
         var clipH = clipY ? Math.max(0, destY + destH - clipY) : 0;
         if (clipH < destH) {
             ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h * clipH / destH), destX, destY, destW, destH - clipH);
-            if (speedPercent && speedPercent > 0.5 && speedPercent <= 0.8) {
+            if (!motionBlurOn) {
+                // Skip rendering motion blur
+            }
+            else if (speedPercent && speedPercent > 0.5 && speedPercent <= 0.8) {
                 ctx.globalAlpha = 0.5;
                 ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h * clipH / destH), destX - 2, destY, destW, destH - clipH);
                 ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h * clipH / destH), destX + 2, destY, destW, destH - clipH);
@@ -122,7 +125,10 @@ var Render = {
     //---------------------------------------------------------------------------
 
     player: function (ctx, width, height, resolution, roadWidth, sprites, speedPercent, scale, destX, destY, steer, updown) {
-        var bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 4;
+        var bounce = 0;
+        if (screenShakeOn) {
+            bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 4;
+        }
         scale = 0.000335;
         
         if (durability <= maxDurability * 3/4) {

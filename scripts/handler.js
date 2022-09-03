@@ -86,7 +86,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
                 src = "./maps/" + map + "/theme.mp3"
             }
         }
-        var music = new Audio(src);
+        music = new Audio(src);
         //music.preservesPitch = false;
         music.playbackRate = 1.1;
         music.loop = true;

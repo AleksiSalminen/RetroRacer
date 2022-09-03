@@ -4,19 +4,25 @@
 /****************************************/
 
 body          { font-family: Arial, Helvetica, sans-serif; background-color: rgb(0,0,0); }
-#racer        { margin: auto; width: 1000px; height: 90vh; border: 2px solid black; }
-#canvas       { margin: auto; width: 1000px; height: 90vh; z-index: 0; background-color: #000000; }
+#racer        { margin: auto; width: 1000px; height: 85vh; border: 2px solid black; }
+#canvas       { margin: auto; width: 1000px; height: 85vh; z-index: 0; background-color: #000000; }
 
 /**************************************************/
 /* rudimentary heads up display (only used in v4) */
 /**************************************************/
 
-#hud                   { margin: auto; width: 1000px; padding: 5px 0; font-family: Verdana, Geneva, sans-serif; font-size: 0.8em; background-color: rgba(78, 78, 78, 0.4); color: black; border-bottom: 2px solid black; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
-#hud .hud              { background-color: rgba(255,255,255,0.6); padding: 5px; border: 1px solid black; margin: 0 5px; transition-property: background-color; transition-duration: 2s; -webkit-transition-property: background-color; -webkit-transition-duration: 2s; }
-#hud #speed            { float: right; }
-#hud #current_lap_time { float: left;  }
-#hud #last_lap_time    { float: left; display: none;  }
-#hud #fast_lap_time    { display: block; width: 12em;  margin: 0 auto; text-align: center; transition-property: background-color; transition-duration: 2s; -webkit-transition-property: background-color; -webkit-transition-duration: 2s; }
+#hud                   { margin: auto; width: 1000px; height:40px; padding: 5px 0; font-family: Verdana, Geneva, sans-serif; font-size: 0.8em; background-color: rgba(78, 78, 78, 0.4); color: black; border-bottom: 2px solid black; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
+#hud .hud              { background-color: rgba(98, 98, 98, 0.6); padding: 5px; border: 1px solid black; margin: 0 5px; transition-property: background-color; transition-duration: 2s; -webkit-transition-property: background-color; -webkit-transition-duration: 2s; }
+#hud #mainMenu         { float: left; color: rgba(98, 98, 98, 0.6); }
+#hud #volumeSpan       { float: right; color: rgba(98, 98, 98, 0.6); }
+#hud #screenShakeSpan  { float: right; color: rgba(98, 98, 98, 0.6); }
+#hud #motionBlurSpan   { float: right; color: rgba(98, 98, 98, 0.6); }
+#hud #settingsToggle   { float: right; color: rgba(98, 98, 98, 0.6); }
 #hud .value            { color: black; font-weight: bold; }
-#hud .fastest          { background-color: rgba(255,215,0,0.5); }
-
+span :hover            { cursor: pointer; }
+a { 
+    text-decoration: none; 
+}
+a:active {
+    color: black;
+} 

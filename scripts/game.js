@@ -103,6 +103,11 @@ var continueCountdown = 1500;
 var startCount = 0;
 var countDown = 500;
 
+var motionBlurOn = true;
+var screenShakeOn = true;
+var volume = 100;
+var music;
+
 var maxDurability = 100;
 var durability = maxDurability;
 var wrecked = false;
@@ -143,7 +148,7 @@ var cameraDepth = null;                    // z distance camera is from screen (
 var drawDistance = 300;                     // number of segments to draw
 var playerX = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
 var playerZ = null;                    // player relative z distance from camera (computed)
-var fogDensity = 5;                       // exponential fog density
+var fogDensity = 2;                       // exponential fog density
 var position = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
 var speed = 0;                       // current speed
 var speedCap = segmentLength / step;      // speed cap (ensure we can't move more than 1 segment in a single frame to make collision detection easier)
@@ -165,12 +170,10 @@ var keyRight = false;
 var keyFaster = false;
 var keySlower = false;
 
-var hud = {
-    speed: { value: null, dom: Dom.get('speed_value') },
-    current_lap_time: { value: null, dom: Dom.get('current_lap_time_value') },
-    last_lap_time: { value: null, dom: Dom.get('last_lap_time_value') },
-    fast_lap_time: { value: null, dom: Dom.get('fast_lap_time_value') }
-}
+Dom.get("volume").addEventListener('input', function () {
+  volume = Dom.get("volume").value;
+  updateSound();
+}, false);
 
 //=========================================================================
 // THE GAME LOOP
@@ -194,7 +197,6 @@ Game.run({
         sprites = images[1];
         reset();
         Dom.storage.fast_lap_time = Dom.storage.fast_lap_time || 180;
-        updateHud('fast_lap_time', formatTime(Util.toFloat(Dom.storage.fast_lap_time)));
     }
 });
 

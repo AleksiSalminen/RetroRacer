@@ -135,16 +135,7 @@ function update(dt) {
                 currentLapTime = 0;
                 if (lastLapTime <= Util.toFloat(Dom.storage.fast_lap_time)) {
                     Dom.storage.fast_lap_time = lastLapTime;
-                    updateHud('fast_lap_time', formatTime(lastLapTime));
-                    Dom.addClassName('fast_lap_time', 'fastest');
-                    Dom.addClassName('last_lap_time', 'fastest');
                 }
-                else {
-                    Dom.removeClassName('fast_lap_time', 'fastest');
-                    Dom.removeClassName('last_lap_time', 'fastest');
-                }
-                updateHud('last_lap_time', formatTime(lastLapTime));
-                Dom.show('last_lap_time');
             }
             else {
                 currentLapTime += dt;
@@ -152,10 +143,6 @@ function update(dt) {
         }
 
         updateEngineSound(speedPercent);
-
-        updateHud('speed', 5 * Math.round(speed / 500) * 1.6);
-        updateHud('current_lap_time', formatTime(currentLapTime));
-
     }
     else if (countDown <= startCount) {
         playing = true;
@@ -265,7 +252,7 @@ function resetCars() {
 
 //-------------------------------------------------------------------------
 
-function updateHud(key, value) { // accessing DOM can be slow, so only do it if value has changed
+function updateHud(key, value) {
     if (hud[key].value !== value) {
         hud[key].value = value;
         Dom.set(hud[key].dom, value);
@@ -291,6 +278,7 @@ function updateEngineSound(speedPercent) {
         engineSound1.currentTime = 0;
         engineSound1.play();
     }
+    engineSound1.volume *= volume/100;
 
     engineSound2.playbackRate = speedPercent * 5 + 2;
     var buffer = 0.2;
@@ -298,6 +286,7 @@ function updateEngineSound(speedPercent) {
         engineSound2.currentTime = 0;
         engineSound2.play();
     }
+    engineSound2.volume *= volume/100;
 
     engineSound3.playbackRate = speedPercent * 2 + 1;
     var buffer = 1;
@@ -305,6 +294,7 @@ function updateEngineSound(speedPercent) {
         engineSound3.currentTime = 0;
         engineSound3.play();
     }
+    engineSound3.volume *= volume/100;
 
     engineSound4.volume = speedPercent / 3;
     var buffer = 0.5;
@@ -312,4 +302,15 @@ function updateEngineSound(speedPercent) {
         engineSound4.currentTime = 0;
         engineSound4.play();
     }
+    engineSound4.volume *= volume/100;
+}
+
+function muteSound() {
+    Dom.get("volume").value = 0;
+    volume = 0;
+    updateSound();
+}
+
+function updateSound() {
+    music.volume = 0.5 * volume/100
 }

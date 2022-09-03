@@ -28,7 +28,9 @@ function render() {
 
     ctx.clearRect(0, 0, width, height);
 
-    preShake(speed / speedCap);
+    if (screenShakeOn) {
+        preShake(speed / speedCap);
+    }
 
     Render.background(ctx, background, width, height, BACKGROUND.SKY, skyOffset, resolution * skySpeed * playerY);
     Render.background(ctx, background, width, height, BACKGROUND.HILLS, hillOffset, resolution * hillSpeed * playerY);
@@ -105,7 +107,9 @@ function render() {
         crashShake(timeSinceCrash, speed / speedCap);
     }
 
-    postShake();
+    if (screenShakeOn) {
+        postShake();
+    }
 
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
 
@@ -142,6 +146,26 @@ function crashShake(timeSinceCrash) {
         ctx.fillStyle = 'rgb(100,0,0)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 1.0;
+    }
+}
+
+function toggleScreenShake() {
+    screenShakeOn = !screenShakeOn;
+    if (screenShakeOn) {
+        Dom.get("screenShake").innerHTML = "SCREEN SHAKE: ON";
+    }
+    else {
+        Dom.get("screenShake").innerHTML = "SCREEN SHAKE: OFF";
+    }
+}
+
+function toggleMotionBlur() {
+    motionBlurOn = !motionBlurOn;
+    if (motionBlurOn) {
+        Dom.get("motionBlur").innerHTML = "MOTION BLUR: ON";
+    }
+    else {
+        Dom.get("motionBlur").innerHTML = "MOTION BLUR: OFF";
     }
 }
 

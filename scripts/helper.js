@@ -10,21 +10,15 @@ var Dom = {
     un: function (ele, type, fn, capture) { Dom.get(ele).removeEventListener(type, fn, capture); },
     show: function (ele, type) { Dom.get(ele).style.display = (type || 'block'); },
     blur: function (ev) { ev.target.blur(); },
-
-    addClassName: function (ele, name) { Dom.toggleClassName(ele, name, true); },
-    removeClassName: function (ele, name) { Dom.toggleClassName(ele, name, false); },
-    toggleClassName: function (ele, name, on) {
-        ele = Dom.get(ele);
-        var classes = ele.className.split(' ');
-        var n = classes.indexOf(name);
-        on = (typeof on == 'undefined') ? (n < 0) : on;
-        if (on && (n < 0))
-            classes.push(name);
-        else if (!on && (n >= 0))
-            classes.splice(n, 1);
-        ele.className = classes.join(' ');
+    showSettings: function () {
+        var style = (Dom.get("motionBlur").style.display === "none") ? "inline-block" : "none";
+        Dom.get("motionBlurSpan").style.display = style;
+        Dom.get("motionBlur").style.display = style;
+        Dom.get("screenShakeSpan").style.display = style;
+        Dom.get("screenShake").style.display = style;
+        Dom.get("volumeSpan").style.display = style;
+        Dom.get("volume").style.display = style;
     },
-
     storage: window.localStorage || {}
 
 }
