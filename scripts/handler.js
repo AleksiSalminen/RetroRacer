@@ -91,7 +91,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
         music.playbackRate = 1.1;
         music.loop = true;
         music.volume = 0.5;
-        //music.play();
+        music.play();
     },
 
     //---------------------------------------------------------------------------
