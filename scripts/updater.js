@@ -4,7 +4,6 @@
 
 function update(dt) {
     if (playing) {
-
         var n, car, carW, sprite, spriteW;
         var playerSegment = findSegment(position + playerZ);
         var playerW = 80 * SPRITES.SCALE;
@@ -15,6 +14,15 @@ function update(dt) {
         updateCars(dt, playerSegment, playerW);
 
         position = Util.increase(position, dt * speed, trackLength);
+
+        if (finished) {
+            if (continueCountdown <= continueCount) {
+                location.href = "./index.html";
+            }
+            else {
+                continueCountdown--;
+            }
+        }
 
         if (!place) {
             place = cars.length + 1;
@@ -28,20 +36,25 @@ function update(dt) {
             timeSinceCrash = 0;
         }
 
-        if (keyLeft)
-            playerX = playerX - dx;
-        else if (keyRight)
-            playerX = playerX + dx;
+        if (hasControl) {
+            if (keyLeft)
+                playerX = playerX - dx;
+            else if (keyRight)
+                playerX = playerX + dx;
 
-        playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
+            playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
 
-        if (keyFaster)
-            speed = Util.accelerate(speed, accel, dt);
-        else if (keySlower)
+            if (keyFaster)
+                speed = Util.accelerate(speed, accel, dt);
+            else if (keySlower)
+                speed = Util.accelerate(speed, breaking, dt);
+            else
+                speed = Util.accelerate(speed, decel, dt);
+        }
+        else {
             speed = Util.accelerate(speed, breaking, dt);
-        else
-            speed = Util.accelerate(speed, decel, dt);
-
+        }
+        
 
         if ((playerX < -1) || (playerX > 1)) {
 
@@ -99,6 +112,11 @@ function update(dt) {
         if (position > playerZ) {
             if (currentLapTime && (startPosition < playerZ)) {
                 lap++;
+                if (lap > laps) {
+                    finished = true;
+                    hasControl = false;
+                    finishedPlace = place;
+                }
                 lastLapTime = currentLapTime;
                 currentLapTime = 0;
                 if (lastLapTime <= Util.toFloat(Dom.storage.fast_lap_time)) {
@@ -127,6 +145,7 @@ function update(dt) {
     }
     else if (countDown <= startCount) {
         playing = true;
+        hasControl = true;
     }
     else {
         countDown--;

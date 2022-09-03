@@ -109,8 +109,11 @@ function render() {
 
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
 
-    if (!playing) {
+    if (!playing && !finished) {
         Render.countdown(ctx, countDown);
+    }
+    else if (finished) {
+        Render.raceEnd(ctx);
     }
     else {
         Render.data(ctx, place);

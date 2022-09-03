@@ -81,10 +81,16 @@ var engineSound4 = new Audio("./audio/engine4.mp3");
 var crashSound = new Audio("./audio/crash.mp3");
 
 var playing = false;
+var hasControl = false;
+var finished = false;
+var continueCount = 0;
+var continueCountdown = 1000;
 var startCount = 0;
 var countDown = 500;
 var lap = 1;
+var laps = 1;
 var place;
+var finishedPlace;
 var fps = 60;                      // how many 'update' frames per second
 var step = 0.4 / fps;                   // how long is each frame (in seconds)
 var width = 1024;                    // logical canvas width

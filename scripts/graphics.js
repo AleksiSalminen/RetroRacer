@@ -163,18 +163,43 @@ var Render = {
             ctx.fillText("Lap:", 10, 40);
             ctx.font = "50px Arial";
             ctx.fillText(lap, 70, 50);
+            ctx.font = "30px Arial";
+            ctx.fillText("/" + laps, 130, 50);
         }
     },
 
     //---------------------------------------------------------------------------
 
-    countdown: function (ctx, count) {
-        var countWidth = 500;
+    raceEnd: function (ctx) {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
-            canvas.width/2-countWidth/2, canvas.height/2-countHeight, 
-            countWidth, countHeight
+            0, canvas.height/2-countHeight, 
+            canvas.width, countHeight
+        );
+
+        ctx.fillStyle = 'white';
+        ctx.font = "100px Arial";
+        var text = "Finished " + finishedPlace;
+        if (finishedPlace === 1) { text += "st" }
+        else if (finishedPlace === 2) { text += "nd" }
+        else if (finishedPlace === 3) { text += "rd" }
+        else  { text += "th" }
+        ctx.fillText(text, canvas.width/2-300, canvas.height/2-countHeight/3);
+        
+        ctx.font = "35px Arial";
+        var text2 = "Continue in " + Math.ceil(continueCountdown/100)
+        ctx.fillText(text2, canvas.width/2-100, canvas.height/2-countHeight/3+50);
+    },
+
+    //---------------------------------------------------------------------------
+
+    countdown: function (ctx, count) {
+        var countHeight = 200;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            0, canvas.height/2-countHeight, 
+            canvas.width, countHeight
         );
         ctx.fillStyle = 'white';
         ctx.font = "100px Arial";
