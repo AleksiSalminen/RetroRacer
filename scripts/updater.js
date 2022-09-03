@@ -285,7 +285,6 @@ function formatTime(dt) {
 //-------------------------------------------------------------------------
 
 function updateEngineSound(speedPercent) {
-    engineSound1.playbackRate = 0.5;
     engineSound1.volume = speedPercent / 3;
     var buffer = 1;
     if (engineSound1.currentTime > engineSound1.duration - buffer) {

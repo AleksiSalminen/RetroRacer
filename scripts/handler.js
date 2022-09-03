@@ -91,26 +91,32 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
         music.playbackRate = 1.1;
         music.loop = true;
         music.volume = 0.5;
-        music.play();
+        //music.play();
     },
 
     //---------------------------------------------------------------------------
 
     playEngineSound: function () {
         engineSound1.preservesPitch = false;
-        engineSound1.volume = 0.1;
+        engineSound1.playbackRate = 0.5;
+        engineSound1.volume = 0;
+        engineSound1.loop = true;
         engineSound1.play();
 
         engineSound2.preservesPitch = false;
         engineSound2.volume = 0.1;
+        engineSound2.playbackRate = 2.0;
+        engineSound2.loop = true;
         engineSound2.play();
 
         engineSound3.preservesPitch = false;
         engineSound3.volume = 0.3;
+        engineSound3.loop = true;
         engineSound3.play();
 
         engineSound4.preservesPitch = false;
-        engineSound4.volume = 0.05;
+        engineSound4.volume = 0;
+        engineSound4.loop = true;
         engineSound4.play();
     },
 
