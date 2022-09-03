@@ -2,16 +2,52 @@
 
 <html>
 <head>
-  <title>2.5D Car Racing Game</title>
+  <title>Retro Racing Game</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head> 
 
 <body> 
 
-  <form action="game.html" method="GET">
-    <h3>Choose map:</h3>
-    <input type="submit" name="map" value="forest_hills" />
-    <input type="submit" name="map" value="city" />
+  <form action="./game.html" method="GET">
+    <h1>--- WELCOME TO RETRO RACING GAME ---</h1>
+    <h2>-------------</h2>
+
+    <h3>- Game -</h3>
+    <b>MAP:</b>
+    <select name="map">
+      <option value="forest_hills">Forest Hills</option>
+      <option value="city">City</option>
+    </select>
+    &nbsp; <b>MODE:</b>
+    <select name="mode">
+      <option value="race">Race</option>
+    </select>
+    <br/><br/>
+    <label for="laps"><b>LAPS</b> (between 1 and 500):</label>
+    <input type="number" name="laps" min="1" max="500" value="3">
+    <h2>-------------</h2>
+
+    <h3>- Player -</h3>
+    <div>
+      <b>MAX SPEED</b>
+      <input type="range" min="1" max="100" value="90" class="slider" name="speed0">
+    </div>
+
+    <h2>-------------</h2>
+
+    <h3>- Opponents -</h3>
+    <div>
+      <b>SPEED RANGE -> Slowest:</b>
+      <input type="range" min="1" max="100" value="50" class="slider" name="speed1">
+      <b>Fastest:</b>
+      <input type="range" min="1" max="100" value="90" class="slider" name="speed2">
+    </div>
+    <br/>
+    <label for="quantity"><b>QUANTITY</b> (between 1 and 300):</label>
+    <input type="number" name="quantity" min="1" max="300" value="50">
+    <h2>-------------</h2>
+
+    <input type="submit" value="START" />
   </form>
 
 </body> 
