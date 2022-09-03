@@ -122,7 +122,32 @@ var Render = {
     //---------------------------------------------------------------------------
 
     player: function (ctx, width, height, resolution, roadWidth, sprites, speedPercent, scale, destX, destY, steer, updown) {
-        var bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 3;
+        var bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 4;
+        scale = 0.000335;
+        
+        if (durability <= maxDurability * 3/4) {
+            if (durability <= maxDurability * 3/4 && durability > maxDurability * 2/4) {
+                Render.smoke(ctx, 1);
+                var crashSprite = SPRITES.SHATTERED1;
+                Render.sprite(ctx, 1000, 600, resolution, roadWidth, sprites, crashSprite, scale, 420, 500 + bounce, -0.5, -1);
+            }
+            else if (durability <= maxDurability * 2/4 && durability > maxDurability * 1/4) {
+                Render.smoke(ctx, 2);
+                var crashSprite = SPRITES.SHATTERED2;
+                Render.sprite(ctx, 1100, 600, resolution, roadWidth, sprites, crashSprite, scale, 460, 550 + bounce, -0.5, -1);
+            }
+            else if (durability <= maxDurability * 1/4 && durability > 0) {
+                Render.smoke(ctx, 5);
+                var crashSprite = SPRITES.SHATTERED3;
+                Render.sprite(ctx, 1000, 900, resolution, roadWidth, sprites, crashSprite, scale, 430, 650 + bounce, -0.5, -1);
+            }
+            else {
+                Render.smoke(ctx, 10);
+                var crashSprite = SPRITES.SHATTERED4;
+                Render.sprite(ctx, width, height, resolution, roadWidth, sprites, crashSprite, scale, destX, destY + bounce, -0.5, -1);
+            }
+        }
+        
         var sprite;
         if (steer < 0)
             sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_LEFT : SPRITES.PLAYER_LEFT;
@@ -131,7 +156,6 @@ var Render = {
         else
             sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
 
-        scale = 0.000335;
         Render.sprite(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
     },
 
@@ -144,6 +168,13 @@ var Render = {
             ctx.fillRect(x, y, width, height);
             ctx.globalAlpha = 1;
         }
+    },
+
+    //---------------------------------------------------------------------------
+
+    smoke: function (ctx, density) {
+        updateSmoke();
+        drawSmoke(density);
     },
 
     //---------------------------------------------------------------------------
@@ -170,7 +201,7 @@ var Render = {
 
     //---------------------------------------------------------------------------
 
-    raceEnd: function (ctx) {
+    finished: function (ctx) {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
@@ -186,6 +217,26 @@ var Render = {
         else if (finishedPlace === 3) { text += "rd" }
         else  { text += "th" }
         ctx.fillText(text, canvas.width/2-300, canvas.height/2-countHeight/3);
+        
+        ctx.font = "35px Arial";
+        var text2 = "Continue in " + Math.ceil(continueCountdown/100)
+        ctx.fillText(text2, canvas.width/2-100, canvas.height/2-countHeight/3+50);
+    },
+
+    //---------------------------------------------------------------------------
+
+    wrecked: function (ctx) {
+        var countHeight = 200;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            0, canvas.height/2-countHeight, 
+            canvas.width, countHeight
+        );
+
+        ctx.fillStyle = 'white';
+        ctx.font = "100px Arial";
+        var text = "Wrecked"
+        ctx.fillText(text, canvas.width/2-180, canvas.height/2-countHeight/3);
         
         ctx.font = "35px Arial";
         var text2 = "Continue in " + Math.ceil(continueCountdown/100)

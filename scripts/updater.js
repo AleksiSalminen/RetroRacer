@@ -15,7 +15,7 @@ function update(dt) {
 
         position = Util.increase(position, dt * speed, trackLength);
 
-        if (finished) {
+        if (finished || wrecked) {
             if (continueCountdown <= continueCount) {
                 location.href = "./index.html";
             }
@@ -65,12 +65,19 @@ function update(dt) {
                 sprite = playerSegment.sprites[n];
                 spriteW = sprite.source.w * SPRITES.SCALE;
                 if (Util.overlap(playerX, playerW, sprite.offset + spriteW / 2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
+                    var oldSpeed = speed;
                     speed = speedCap / 5;
                     position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // Crashes to an obstacle
                     if (!crashToObstacle) {
                         crashToObstacle = true;
                         timeSinceCrash = 0;
                         Game.playCrashSound();
+                        durability -= Math.floor(oldSpeed/maxSpeed*20);
+                        if (durability <= 0) {
+                            wrecked = true;
+                            hasControl = false;
+                            finishedPlace = cars.length+1;
+                        }
                     }
                     break;
                 }
@@ -86,12 +93,19 @@ function update(dt) {
                     car.place += 1;
                 }
                 if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
+                    var oldSpeed = speed;
                     speed = car.speed * (car.speed / speed);
                     position = Util.increase(car.z, -playerZ, trackLength); // Crashes to another vehicle
                     if (!crashToObstacle) {
                         crashToObstacle = true;
                         timeSinceCrash = 0;
                         Game.playCrashSound();
+                        durability -= Math.floor(oldSpeed / car.speed * 5);
+                        if (durability <= 0) {
+                            wrecked = true;
+                            hasControl = false;
+                            finishedPlace = cars.length+1;
+                        }
                     }
                     break;
                 }
@@ -146,6 +160,7 @@ function update(dt) {
     else if (countDown <= startCount) {
         playing = true;
         hasControl = true;
+        initSmoke(ctx, SPRITES.SMOKE);
     }
     else {
         countDown--;

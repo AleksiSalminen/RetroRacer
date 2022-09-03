@@ -109,11 +109,14 @@ function render() {
 
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
 
-    if (!playing && !finished) {
+    if (!playing && !finished && !wrecked) {
         Render.countdown(ctx, countDown);
     }
     else if (finished) {
-        Render.raceEnd(ctx);
+        Render.finished(ctx);
+    }
+    else if (wrecked) {
+        Render.wrecked(ctx);
     }
     else {
         Render.data(ctx, place);
@@ -132,12 +135,14 @@ function postShake() {
     ctx.restore();
 }
 
-function crashShake(timeSinceCrash, speedPercent) {
-    var ratio = timeSinceCrash/crashTimer;
-    ctx.globalAlpha = 1 - ratio;
-    ctx.fillStyle = 'rgb(100,0,0)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = 1.0;
+function crashShake(timeSinceCrash) {
+    if (!finished) {
+        var ratio = timeSinceCrash/crashTimer;
+        ctx.globalAlpha = 1 - ratio;
+        ctx.fillStyle = 'rgb(100,0,0)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1.0;
+    }
 }
 
 function findSegment(z) {

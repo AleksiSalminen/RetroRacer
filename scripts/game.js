@@ -75,7 +75,12 @@ var SPRITES = {
   PLAYER_UPHILL_RIGHT:    { x:    0, y: 1597, w:  624, h:  403 },
   PLAYER_LEFT:            { x:  870, y: 1597, w:  624, h:  403 },
   PLAYER_STRAIGHT:        { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_RIGHT:           { x:    0, y: 1597, w:  624, h:  403 }
+  PLAYER_RIGHT:           { x:    0, y: 1597, w:  624, h:  403 },
+  SHATTERED1:             { x:    750, y: 2580, w:  205, h:  80 },
+  SHATTERED2:             { x:    750, y: 2454, w:  240, h:  130 },
+  SHATTERED3:             { x:    950, y: 2460, w:  600, h:  250 },
+  SHATTERED4:             { x:    880, y: 2050, w:  624, h:  403 },
+  SMOKE:                  { x:    580, y: 2010, w:  260, h:  260 }
 };
 
 SPRITES.SCALE = 0.3 * (1/80) // the reference sprite width should be 1/3rd the (half-)roadWidth
@@ -94,9 +99,13 @@ var playing = false;
 var hasControl = false;
 var finished = false;
 var continueCount = 0;
-var continueCountdown = 1000;
+var continueCountdown = 1500;
 var startCount = 0;
 var countDown = 500;
+
+var maxDurability = 100;
+var durability = maxDurability;
+var wrecked = false;
 var place;
 var finishedPlace;
 var fps = 60;                      // how many 'update' frames per second
