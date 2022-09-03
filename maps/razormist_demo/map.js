@@ -2,9 +2,9 @@ var maps = [];
 
 maps.push({
 
-    id: "forest_hills",
+    id: "razormist_demo",
 
-    lanes: 2,
+    lanes: 3,
 
     COLORS: {
         SKY:  '#72D7EE',
