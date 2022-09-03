@@ -188,6 +188,11 @@ maps.push({
             segment.cars.push(car);
             cars.push(car);
         }
+        cars.sort(function(a, b){return b.z-a.z});
+        let i = 1;
+        cars.forEach(function (car) {
+            car.place = i; i++;
+        });
     }
 
 });

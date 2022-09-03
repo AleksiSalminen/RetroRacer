@@ -188,6 +188,7 @@ maps.push({
 
     resetCars: function () {
         cars = [];
+        totalCars = 199;
         var n, car, segment, offset, z, sprite, speed;
         for (var n = 0; n < totalCars; n++) {
             offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
@@ -199,6 +200,11 @@ maps.push({
             segment.cars.push(car);
             cars.push(car);
         }
+        cars.sort(function(a, b){return b.z-a.z});
+        let i = 1;
+        cars.forEach(function (car) {
+            car.place = i; i++;
+        });
     }
 
 });

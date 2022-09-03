@@ -80,6 +80,7 @@ var engineSound3 = new Audio("./audio/engine3.mp3");
 var engineSound4 = new Audio("./audio/engine4.mp3");
 var crashSound = new Audio("./audio/crash.mp3");
 
+var place;
 var fps = 60;                      // how many 'update' frames per second
 var step = 0.4 / fps;                   // how long is each frame (in seconds)
 var width = 1024;                    // logical canvas width

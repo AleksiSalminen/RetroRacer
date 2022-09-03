@@ -10,10 +10,15 @@ function update(dt) {
     var speedPercent = speed / speedCap;
     var dx = dt * turning * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
     var startPosition = position;
+    var passedCars = [];
 
     updateCars(dt, playerSegment, playerW);
 
     position = Util.increase(position, dt * speed, trackLength);
+
+    if (!place) {
+        place = cars.length + 1;
+    }
 
     if (crashToObstacle && timeSinceCrash < crashTimer) {
         timeSinceCrash++;
@@ -63,6 +68,10 @@ function update(dt) {
         car = playerSegment.cars[n];
         carW = car.sprite.w * SPRITES.SCALE;
         if (speed > car.speed) {
+            if (place === car.place+1) {
+                place -= 1;
+                car.place += 1;
+            }
             if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
                 speed = car.speed * (car.speed / speed);
                 position = Util.increase(car.z, -playerZ, trackLength); // Crashes to another vehicle
@@ -73,6 +82,10 @@ function update(dt) {
                 }
                 break;
             }
+        }
+        else if (speed <= car.speed && place === car.place-1) {
+            place += 1;
+            car.place -= 1;
         }
     }
 
@@ -122,6 +135,17 @@ function updateCars(dt, playerSegment, playerW) {
         car.z = Util.increase(car.z, dt * car.speed, trackLength);
         car.percent = Util.percentRemaining(car.z, segmentLength); // useful for interpolation during rendering phase
         newSegment = findSegment(car.z);
+        for (let i = 0;i < oldSegment.cars.length;i++) {
+            let otherCar = oldSegment.cars[i];
+            if (car.speed > otherCar.speed && car.place === otherCar.place+1) {
+                car.place -= 1;
+                otherCar.place += 1;
+            }
+            else if (car.speed <= otherCar.speed && car.place === otherCar.place-1) {
+                car.place += 1;
+                otherCar.place -= 1;
+            }
+        }
         if (oldSegment != newSegment) {
             index = oldSegment.cars.indexOf(car);
             oldSegment.cars.splice(index, 1);

@@ -77,6 +77,8 @@ function render() {
             spriteX = Util.interpolate(segment.p1.screen.x, segment.p2.screen.x, car.percent) + (spriteScale * car.offset * roadWidth * width / 2);
             spriteY = Util.interpolate(segment.p1.screen.y, segment.p2.screen.y, car.percent);
             Render.sprite(ctx, width, height, resolution, roadWidth, sprites, car.sprite, spriteScale, spriteX, spriteY, -0.5, -1, segment.clip, speed / speedCap);
+            let dist = 40;
+            Render.place(ctx, car.place, dist, spriteX, spriteY);
         }
 
         for (i = 0; i < segment.sprites.length; i++) {

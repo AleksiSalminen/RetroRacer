@@ -71,6 +71,21 @@ var Render = {
 
     //---------------------------------------------------------------------------
 
+    place: function(ctx, place, dist, x, y) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(x-dist/2, y-50, dist, 20);
+        ctx.lineWidth = "1";
+        ctx.strokeStyle = "white";
+        ctx.beginPath();
+        ctx.rect(x-dist/2, y-50, dist, dist/2);
+        ctx.stroke();
+        ctx.fillStyle = 'white';
+        ctx.font = "20px Arial";
+        ctx.fillText(place, x-dist/2+5, y-33);
+    },
+
+    //---------------------------------------------------------------------------
+
     sprite: function (ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY, speedPercent) {
 
         //  scale for projection AND relative to roadWidth (for tweakUI)
