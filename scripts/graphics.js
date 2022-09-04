@@ -71,24 +71,24 @@ var Render = {
 
     //---------------------------------------------------------------------------
 
-    place: function(ctx, place, dist, x, y) {
+    place: function (ctx, place, dist, x, y) {
         ctx.fillStyle = "black";
-        ctx.fillRect(x-dist/2, y-50, dist, 20);
+        ctx.fillRect(x - dist / 2, y - 50, dist, 20);
         ctx.lineWidth = "1";
         ctx.strokeStyle = "white";
         ctx.beginPath();
-        ctx.rect(x-dist/2, y-50, dist, dist/2);
+        ctx.rect(x - dist / 2, y - 50, dist, dist / 2);
         ctx.stroke();
         ctx.fillStyle = 'white';
         ctx.font = "20px Arial";
-        ctx.fillText(place, x-dist/2+5, y-33);
+        ctx.fillText(place, x - dist / 2 + 5, y - 33);
     },
 
     //---------------------------------------------------------------------------
 
     sprite: function (ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY, speedPercent) {
 
-        //  scale for projection AND relative to roadWidth (for tweakUI)
+        //  scale for projection AND relative to roadWidth
         var destW = (sprite.w * scale * width / 2) * (SPRITES.SCALE * roadWidth);
         var destH = (sprite.h * scale * width / 2) * (SPRITES.SCALE * roadWidth);
 
@@ -130,39 +130,132 @@ var Render = {
             bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1, 1]) * 4;
         }
         scale = 0.000335;
-        
-        if (durability <= maxDurability * 3/4) {
-            if (durability <= maxDurability * 3/4 && durability > maxDurability * 2/4) {
+
+        if (durability <= maxDurability * 3 / 4) {
+            if (durability <= maxDurability * 3 / 4 && durability > maxDurability * 2 / 4) {
                 Render.smoke(ctx, 1);
-                var crashSprite = SPRITES.SHATTERED1;
-                Render.sprite(ctx, 1000, 600, resolution, roadWidth, sprites, crashSprite, scale, 420, 500 + bounce, -0.5, -1);
+                if (cameraView === 2) {
+                    var crashSprite = SPRITES.SHATTERED1;
+                    Render.sprite(ctx, 1000, 600, resolution, roadWidth, sprites, crashSprite, scale, 420, 500 + bounce, -0.5, -1);
+                }
             }
-            else if (durability <= maxDurability * 2/4 && durability > maxDurability * 1/4) {
+            else if (durability <= maxDurability * 2 / 4 && durability > maxDurability * 1 / 4) {
                 Render.smoke(ctx, 2);
-                var crashSprite = SPRITES.SHATTERED2;
-                Render.sprite(ctx, 1100, 600, resolution, roadWidth, sprites, crashSprite, scale, 460, 550 + bounce, -0.5, -1);
+                if (cameraView === 2) {
+                    var crashSprite = SPRITES.SHATTERED2;
+                    Render.sprite(ctx, 1100, 600, resolution, roadWidth, sprites, crashSprite, scale, 460, 550 + bounce, -0.5, -1);
+                }
             }
-            else if (durability <= maxDurability * 1/4 && durability > 0) {
+            else if (durability <= maxDurability * 1 / 4 && durability > 0) {
                 Render.smoke(ctx, 5);
-                var crashSprite = SPRITES.SHATTERED3;
-                Render.sprite(ctx, 1000, 900, resolution, roadWidth, sprites, crashSprite, scale, 430, 650 + bounce, -0.5, -1);
+                if (cameraView === 2) {
+                    var crashSprite = SPRITES.SHATTERED3;
+                    Render.sprite(ctx, 1000, 900, resolution, roadWidth, sprites, crashSprite, scale, 430, 650 + bounce, -0.5, -1);
+                }
             }
             else {
                 Render.smoke(ctx, 10);
-                var crashSprite = SPRITES.SHATTERED4;
-                Render.sprite(ctx, width, height, resolution, roadWidth, sprites, crashSprite, scale, destX, destY + bounce, -0.5, -1);
+                if (cameraView === 2) {
+                    var crashSprite = SPRITES.SHATTERED4;
+                    Render.sprite(ctx, width, height, resolution, roadWidth, sprites, crashSprite, scale, destX, destY + bounce, -0.5, -1);
+                }
             }
         }
-        
+
         var sprite;
-        if (steer < 0)
-            sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_LEFT : SPRITES.PLAYER_LEFT;
-        else if (steer > 0)
-            sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_RIGHT : SPRITES.PLAYER_RIGHT;
-        else
-            sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
+        if (cameraView === 1) {
+            if (steer < 0)
+                sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_LEFT : SPRITES.PLAYER_LEFT;
+            else if (steer > 0)
+                sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_RIGHT : SPRITES.PLAYER_RIGHT;
+            else
+                sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
+        }
+        else if (cameraView === 2) {
+            if (steer < 0)
+                sprite = SPRITES.PLAYER_FPS_LEFT;
+            else if (steer > 0)
+                sprite = SPRITES.PLAYER_FPS_RIGHT;
+            else
+                sprite = SPRITES.PLAYER_FPS_STRAIGHT;
+        }
+        else {
+            if (steer < 0)
+                sprite = SPRITES.PLAYER_FPS_LEFT;
+            else if (steer > 0)
+                sprite = SPRITES.PLAYER_FPS_RIGHT;
+            else
+                sprite = SPRITES.PLAYER_FPS_STRAIGHT;
+        }
 
         Render.sprite(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
+    
+        if (cameraView === 1 && !wrecked) {
+            ctx.globalAlpha = 0.2;
+            ctx.fillStyle = "rgb(0, 256, 256)";
+            var renderX = canvas.width/2;
+            if      (keyLeft)  { renderX += 35; }
+            else if (keyRight) { renderX -= 35; }
+
+            ctx.beginPath();
+            ctx.ellipse(renderX-50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX-50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX-50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX+50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX+50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX+50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+
+            for (let i = 0;i < Math.ceil(10*speed/maxSpeed);i++) {
+                var randY = 150*Math.random();
+                var randSize = 75*Math.random();
+                var incr = Math.floor(randY/2);
+                ctx.beginPath();
+                ctx.ellipse(renderX-50-randY, 630+randY, 50+incr+randSize, 60+incr+randSize, Math.PI / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(renderX+50+randY, 630+randY, 50+incr+randSize, 60+incr+randSize, Math.PI / 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1.0;
+        }
+        
+        if (durability <= maxDurability * 3 / 4) {
+            if (durability <= maxDurability * 3 / 4 && durability > maxDurability * 2 / 4) {
+                if (cameraView === 1) {
+                    var crashSprite = SPRITES.SHATTERED1;
+                    Render.sprite(ctx, 1000, 600, resolution, roadWidth, sprites, crashSprite, scale, 420, 500 + bounce, -0.5, -1);
+                }
+            }
+            else if (durability <= maxDurability * 2 / 4 && durability > maxDurability * 1 / 4) {
+                if (cameraView === 1) {
+                    var crashSprite = SPRITES.SHATTERED2;
+                    Render.sprite(ctx, 1100, 600, resolution, roadWidth, sprites, crashSprite, scale, 460, 550 + bounce, -0.5, -1);
+                }
+            }
+            else if (durability <= maxDurability * 1 / 4 && durability > 0) {
+                if (cameraView === 1) {
+                    var crashSprite = SPRITES.SHATTERED3;
+                    Render.sprite(ctx, 1000, 900, resolution, roadWidth, sprites, crashSprite, scale, 430, 650 + bounce, -0.5, -1);
+                }
+            }
+            else {
+                if (cameraView === 1) {
+                    var crashSprite = SPRITES.SHATTERED4;
+                    Render.sprite(ctx, width, height, resolution, roadWidth, sprites, crashSprite, scale, destX, destY + bounce, -0.5, -1);
+                }
+            }
+        }
     },
 
     //---------------------------------------------------------------------------
@@ -194,16 +287,16 @@ var Render = {
             ctx.globalAlpha = 1.0;
             ctx.fillStyle = 'white';
             ctx.font = "50px Arial";
-            ctx.fillText(place, canvas.width/2-90, 50);
+            ctx.fillText(place, canvas.width / 2 - 90, 50);
             ctx.font = "30px Arial";
-            ctx.fillText("/"+(cars.length+1), canvas.width/2, 50);
+            ctx.fillText("/" + (cars.length + 1), canvas.width / 2, 50);
             ctx.fillText("Lap:", 10, 40);
             ctx.font = "50px Arial";
             ctx.fillText(lap, 70, 50);
             ctx.font = "30px Arial";
             ctx.fillText("/" + laps, 130, 50);
 
-            var speedInKMH = 5 * Math.round(speed/500) * 1.6;
+            var speedInKMH = 5 * Math.round(speed / 500) * 1.6;
             ctx.font = "50px Arial";
             ctx.fillText(speedInKMH, 850, 50);
             ctx.font = "30px Arial";
@@ -212,16 +305,16 @@ var Render = {
             var circles = 9;
             var strain = Math.floor(speed / maxSpeed * circles);
             var circleColor;
-            if      (strain >= 9) { circleColor = "red";    }
-            else if (strain >= 6)  { circleColor = "orange"; }
-            else                    { circleColor = "green";  }
-            
+            if (strain >= 9) { circleColor = "red"; }
+            else if (strain >= 6) { circleColor = "orange"; }
+            else { circleColor = "green"; }
+
             ctx.globalAlpha = 0.6;
-            for (var i = 0;i < circles;i++) {
+            for (var i = 0; i < circles; i++) {
                 ctx.beginPath();
-                ctx.arc(canvas.width/2-90+i*20, 100, 6, 0, 2 * Math.PI, false);
+                ctx.arc(canvas.width / 2 - 90 + i * 20, 100, 6, 0, 2 * Math.PI, false);
                 if (i < strain) { ctx.fillStyle = circleColor; }
-                else  { ctx.fillStyle = "black"; }
+                else { ctx.fillStyle = "black"; }
                 ctx.fill();
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = '#003300';
@@ -237,7 +330,7 @@ var Render = {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
-            0, canvas.height/2-countHeight, 
+            0, canvas.height / 2 - countHeight,
             canvas.width, countHeight
         );
 
@@ -247,12 +340,12 @@ var Render = {
         if (finishedPlace === 1) { text += "st" }
         else if (finishedPlace === 2) { text += "nd" }
         else if (finishedPlace === 3) { text += "rd" }
-        else  { text += "th" }
-        ctx.fillText(text, canvas.width/2-300, canvas.height/2-countHeight/3);
-        
+        else { text += "th" }
+        ctx.fillText(text, canvas.width / 2 - 300, canvas.height / 2 - countHeight / 3);
+
         ctx.font = "35px Arial";
-        var text2 = "Continue in " + Math.ceil(continueCountdown/100)
-        ctx.fillText(text2, canvas.width/2-100, canvas.height/2-countHeight/3+50);
+        var text2 = "Continue in " + Math.ceil(continueCountdown / 100)
+        ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 3 + 50);
     },
 
     //---------------------------------------------------------------------------
@@ -261,19 +354,19 @@ var Render = {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
-            0, canvas.height/2-countHeight, 
+            0, canvas.height / 2 - countHeight,
             canvas.width, countHeight
         );
 
         ctx.fillStyle = 'white';
         ctx.font = "100px Arial";
         var text = "Wrecked"
-        ctx.fillText(text, canvas.width/2-180, canvas.height/2-countHeight/3);
-        
+        ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 3);
+
         ctx.font = "35px Arial";
-        var text2 = "Continue in " + Math.ceil(continueCountdown/100)
-        ctx.fillText(text2, canvas.width/2-100, canvas.height/2-countHeight/3+50);
-    
+        var text2 = "Continue in " + Math.ceil(continueCountdown / 100)
+        ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 3 + 50);
+
         Render.data(ctx, finishedPlace);
     },
 
@@ -283,15 +376,15 @@ var Render = {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
-            0, canvas.height/2-countHeight, 
+            0, canvas.height / 2 - countHeight,
             canvas.width, countHeight
         );
 
         ctx.fillStyle = 'white';
         ctx.font = "100px Arial";
         var text = "Paused"
-        ctx.fillText(text, canvas.width/2-180, canvas.height/2-countHeight/3);
-    
+        ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 3);
+
         Render.data(ctx, place);
     },
 
@@ -301,14 +394,14 @@ var Render = {
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
-            0, canvas.height/2-countHeight, 
+            0, canvas.height / 2 - countHeight,
             canvas.width, countHeight
         );
         ctx.fillStyle = 'white';
         ctx.font = "100px Arial";
-        ctx.fillText(Math.ceil(count/100), canvas.width/2-25, canvas.height/2-countHeight/3);
+        ctx.fillText(Math.ceil(count / 100), canvas.width / 2 - 25, canvas.height / 2 - countHeight / 3);
     },
-    
+
     rumbleWidth: function (projectedRoadWidth, lanes) { return projectedRoadWidth / Math.max(6, 2 * lanes); },
     laneMarkerWidth: function (projectedRoadWidth, lanes) { return projectedRoadWidth / Math.max(32, 8 * lanes); }
 

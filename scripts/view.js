@@ -94,10 +94,17 @@ function render() {
         }
 
         if (segment == playerSegment) {
-            Render.player(ctx, width, height, resolution, roadWidth, sprites, speed / speedCap,
-                cameraDepth / playerZ,
+            var renderHeight = (height / 2) - (cameraDepth / playerZ * Util.interpolate(playerSegment.p1.camera.y, playerSegment.p2.camera.y, playerPercent) * height / 2);
+            var scale = cameraDepth / playerZ;
+            var renderWidth = width;
+            if (cameraView === 1) {
+                renderHeight -= 300;
+                renderWidth *= 1.5;
+            }
+            Render.player(ctx, renderWidth, height, resolution, roadWidth, sprites, speed / speedCap,
+                scale,
                 width / 2,
-                (height / 2) - (cameraDepth / playerZ * Util.interpolate(playerSegment.p1.camera.y, playerSegment.p2.camera.y, playerPercent) * height / 2),
+                renderHeight,
                 speed * (keyLeft ? -1 : keyRight ? 1 : 0),
                 playerSegment.p2.world.y - playerSegment.p1.world.y);
         }

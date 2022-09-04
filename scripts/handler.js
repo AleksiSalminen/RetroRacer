@@ -83,6 +83,26 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
 
     //---------------------------------------------------------------------------
 
+    changeCamera: function () {
+        if (cameraView === 1) {
+            cameraView = 2;
+            cameraHeight = 550;
+            roadWidth = 3000;
+        }
+        else if (cameraView === 2) {
+            cameraView = 1;
+            cameraHeight = 1000;
+            roadWidth = 2600;
+        }
+        else {
+            cameraView = 2;
+            cameraHeight = 550;
+            roadWidth = 3000;
+        }
+    },
+
+    //---------------------------------------------------------------------------
+
     playMusic: function () {
         var src = "";
         for (let i = 0;i < maps.length;i++) {

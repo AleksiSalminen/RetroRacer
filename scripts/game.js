@@ -26,6 +26,7 @@ var KEY = {
   D:     68,
   S:     83,
   W:     87,
+  C:     67,
   ESC:   27
 };
 
@@ -71,17 +72,20 @@ var SPRITES = {
   CAR02:                  { x: 1383, y:  825, w:   80, h:   59 },
   CAR04:                  { x: 1383, y:  894, w:   80, h:   57 },
   CAR01:                  { x: 1205, y: 1018, w:   80, h:   56 },
-  PLAYER_UPHILL_LEFT:     { x:  870, y: 1597, w:  624, h:  403 },
-  PLAYER_UPHILL_STRAIGHT: { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_UPHILL_RIGHT:    { x:    0, y: 1597, w:  624, h:  403 },
-  PLAYER_LEFT:            { x:  870, y: 1597, w:  624, h:  403 },
-  PLAYER_STRAIGHT:        { x:  868, y: 1084, w:  624, h:  403 },
-  PLAYER_RIGHT:           { x:    0, y: 1597, w:  624, h:  403 },
-  SHATTERED1:             { x:    750, y: 2580, w:  205, h:  80 },
-  SHATTERED2:             { x:    750, y: 2454, w:  240, h:  130 },
-  SHATTERED3:             { x:    950, y: 2460, w:  600, h:  250 },
-  SHATTERED4:             { x:    880, y: 2050, w:  624, h:  403 },
-  SMOKE:                  { x:    580, y: 2010, w:  260, h:  260 }
+  PLAYER_UPHILL_LEFT:     { x:  780, y:  718, w:  240, h:  120 },
+  PLAYER_UPHILL_STRAIGHT: { x:  957, y:  480, w:  220, h:  120 },
+  PLAYER_UPHILL_RIGHT:    { x:  780, y:  597, w:  240, h:  120 },
+  PLAYER_LEFT:            { x:  780, y:  718, w:  240, h:  120 },
+  PLAYER_STRAIGHT:        { x:  957, y:  480, w:  220, h:  120 },
+  PLAYER_RIGHT:           { x:  780, y:  597, w:  240, h:  120 },
+  PLAYER_FPS_LEFT:        { x:  870, y: 1597, w:  624, h:  403 },
+  PLAYER_FPS_STRAIGHT:    { x:  868, y: 1084, w:  624, h:  403 },
+  PLAYER_FPS_RIGHT:       { x:    0, y: 1597, w:  624, h:  403 },
+  SHATTERED1:             { x:  750, y: 2580, w:  205, h:   80 },
+  SHATTERED2:             { x:  750, y: 2454, w:  240, h:  130 },
+  SHATTERED3:             { x:  950, y: 2460, w:  600, h:  250 },
+  SHATTERED4:             { x:  880, y: 2050, w:  624, h:  403 },
+  SMOKE:                  { x:  580, y: 2010, w:  260, h:  260 }
 };
 
 SPRITES.SCALE = 0.3 * (1/80) // the reference sprite width should be 1/3rd the (half-)roadWidth
@@ -147,6 +151,7 @@ for (let i = 0;i < maps.length;i++) {
 var fieldOfView = 140;                     // angle (degrees) for field of view
 var cameraHeight = 550;                    // z height of camera
 var cameraDepth = null;                    // z distance camera is from screen (computed)
+var cameraView = 2;
 var drawDistance = 300;                     // number of segments to draw
 var playerX = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
 var playerZ = null;                    // player relative z distance from camera (computed)
@@ -195,6 +200,7 @@ Game.run({
         { keys: [KEY.RIGHT, KEY.D], mode: 'up', action: function () { keyRight = false; } },
         { keys: [KEY.UP, KEY.W], mode: 'up', action: function () { keyFaster = false; } },
         { keys: [KEY.DOWN, KEY.S], mode: 'up', action: function () { keySlower = false; } },
+        { keys: [KEY.DOWN, KEY.C], mode: 'down', action: function () { Game.changeCamera(); } },
         { keys: [KEY.DOWN, KEY.ESC], mode: 'down', action: function () { Game.pause(); } }
     ],
     ready: function (images) {
