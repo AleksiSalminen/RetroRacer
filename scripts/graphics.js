@@ -190,7 +190,7 @@ var Render = {
 
         Render.sprite(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
     
-        if (cameraView === 1 && !wrecked) {
+        if (cameraView === 1 && !wrecked && !finished) {
             ctx.globalAlpha = 0.2;
             ctx.fillStyle = "rgb(0, 256, 256)";
             var renderX = canvas.width/2;
