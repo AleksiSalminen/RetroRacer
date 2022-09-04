@@ -302,26 +302,54 @@ var Render = {
             ctx.font = "30px Arial";
             ctx.fillText("km/h", 940, 50);
 
-            var circles = 9;
-            var strain = Math.floor(speed / maxSpeed * circles);
-            var circleColor;
-            if (strain >= 9) { circleColor = "red"; }
-            else if (strain >= 6) { circleColor = "orange"; }
-            else { circleColor = "green"; }
+            //Render.throttleMeter2(ctx);
 
-            ctx.globalAlpha = 0.6;
-            for (var i = 0; i < circles; i++) {
-                ctx.beginPath();
-                ctx.arc(canvas.width / 2 - 90 + i * 20, 100, 6, 0, 2 * Math.PI, false);
-                if (i < strain) { ctx.fillStyle = circleColor; }
-                else { ctx.fillStyle = "black"; }
-                ctx.fill();
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = '#003300';
-                ctx.stroke();
-            }
-            ctx.globalAlpha = 1.0;
+            Render.throttleMeter1(ctx);
         }
+    },
+
+    throttleMeter1: function (ctx) {
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = "green";
+        var pillarHeight = speed/maxSpeed * 450;
+        var colorHeight = 15;
+        var partHeight = 20;
+        var maxPillars = Math.ceil(450 / colorHeight);
+        var pillars = Math.floor(pillarHeight/colorHeight);
+        for (let i = 0;i < pillars;i++) {
+            if (i >= maxPillars*4/4-1) {
+                ctx.fillStyle = "red";
+            }
+            else if (i >= maxPillars*3/4-1) {
+                ctx.fillStyle = "orange";
+            }
+            ctx.fillRect(canvas.width-25-i*3, canvas.height- 100 - i*partHeight, i*3+5, colorHeight);
+        }
+        var remainder = pillarHeight % colorHeight;
+        ctx.fillRect(canvas.width-25-pillars*3, canvas.height- 100 - pillars*partHeight - remainder + colorHeight, pillars*3+5, remainder);
+        ctx.globalAlpha = 1.0;
+    },
+
+    throttleMeter2: function (ctx) {
+        var circles = 9;
+        var strain = Math.floor(speed / maxSpeed * circles);
+        var circleColor;
+        if (strain >= 9) { circleColor = "red"; }
+        else if (strain >= 6) { circleColor = "orange"; }
+        else { circleColor = "green"; }
+
+        ctx.globalAlpha = 0.6;
+        for (var i = 0; i < circles; i++) {
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2 - 90 + i * 20, 100, 6, 0, 2 * Math.PI, false);
+            if (i < strain) { ctx.fillStyle = circleColor; }
+            else { ctx.fillStyle = "black"; }
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#003300';
+            ctx.stroke();
+        }
+        ctx.globalAlpha = 1.0;
     },
 
     //---------------------------------------------------------------------------
