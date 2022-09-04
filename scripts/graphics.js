@@ -203,6 +203,12 @@ var Render = {
             ctx.font = "30px Arial";
             ctx.fillText("/" + laps, 130, 50);
 
+            var speedInKMH = 5 * Math.round(speed/500) * 1.6;
+            ctx.font = "50px Arial";
+            ctx.fillText(speedInKMH, 850, 50);
+            ctx.font = "30px Arial";
+            ctx.fillText("km/h", 940, 50);
+
             var circles = 9;
             var strain = Math.floor(speed / maxSpeed * circles);
             var circleColor;
