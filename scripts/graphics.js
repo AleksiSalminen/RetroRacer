@@ -309,24 +309,36 @@ var Render = {
     },
 
     throttleMeter1: function (ctx) {
-        ctx.globalAlpha = 0.7;
-        ctx.fillStyle = "green";
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = "rgb(0, 256, 256)";
         var pillarHeight = speed/maxSpeed * 450;
         var colorHeight = 15;
         var partHeight = 20;
         var maxPillars = Math.ceil(450 / colorHeight);
         var pillars = Math.floor(pillarHeight/colorHeight);
         for (let i = 0;i < pillars;i++) {
-            if (i >= maxPillars*4/4-1) {
-                ctx.fillStyle = "red";
-            }
-            else if (i >= maxPillars*3/4-1) {
-                ctx.fillStyle = "orange";
-            }
+            ctx.fillRect(canvas.width-25-i*3-2, canvas.height- 100 - i*partHeight-2, i*3+5+4, colorHeight+4);
             ctx.fillRect(canvas.width-25-i*3, canvas.height- 100 - i*partHeight, i*3+5, colorHeight);
+            ctx.fillRect(canvas.width-25-i*3+2, canvas.height- 100 - i*partHeight+2, i*3+5-4, colorHeight-4);
         }
         var remainder = pillarHeight % colorHeight;
+        ctx.fillRect(canvas.width-25-pillars*3-2, canvas.height- 100 - pillars*partHeight - remainder + colorHeight-2, pillars*3+5+4, remainder+4);
         ctx.fillRect(canvas.width-25-pillars*3, canvas.height- 100 - pillars*partHeight - remainder + colorHeight, pillars*3+5, remainder);
+        ctx.fillRect(canvas.width-25-pillars*3+2, canvas.height- 100 - pillars*partHeight - remainder + colorHeight+2, pillars*3+5-4, remainder-4);
+        
+        if (speed/maxSpeed === 1) {
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(canvas.width-50, canvas.height-100, 10, 0, 2 * Math.PI, false);
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = 'rgb(0, 256, 256)';
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(canvas.width-50, canvas.height-100, 10, 0, 2 * Math.PI, false);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = 'rgb(0, 256, 256)';
+            ctx.stroke();
+        }
         ctx.globalAlpha = 1.0;
     },
 
@@ -379,6 +391,8 @@ var Render = {
     //---------------------------------------------------------------------------
 
     wrecked: function (ctx) {
+        Render.data(ctx, finishedPlace);
+        
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
@@ -394,13 +408,13 @@ var Render = {
         ctx.font = "35px Arial";
         var text2 = "Continue in " + Math.ceil(continueCountdown / 100)
         ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 3 + 50);
-
-        Render.data(ctx, finishedPlace);
     },
 
     //---------------------------------------------------------------------------
 
     paused: function (ctx) {
+        Render.data(ctx, place);
+
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
@@ -413,7 +427,6 @@ var Render = {
         var text = "Paused"
         ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 3);
 
-        Render.data(ctx, place);
     },
 
     //---------------------------------------------------------------------------
