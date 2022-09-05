@@ -9,7 +9,7 @@ var MODES = {
   free_drive: "Free Drive"
 }
 var mode = searchParams[1].split('=')[1];
-document.title = MODES[mode] + " - " + map.name;
+document.title = MODES[mode] + " - " + map.name + " - Retro Racing Game";
 var lap = 1;
 var laps = parseInt(searchParams[2].split('=')[1]);
 var playerSpeedPercent = parseFloat(searchParams[3].split('=')[1] / 100);

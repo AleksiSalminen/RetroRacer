@@ -20,7 +20,7 @@ function update(dt) {
 
         if (finished || wrecked) {
             if (continueCountdown <= continueCount) {
-                location.href = "./index.html";
+                location.href = "../main_menu/main_menu.html";
             }
             else {
                 continueCountdown--;
