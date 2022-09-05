@@ -1,11 +1,16 @@
 
-var select = document.getElementById('map_select');
+var selectRace = document.getElementById('map_select_race');
+var selectTimeTrial = document.getElementById('map_select_time_trial');
 var opt;
 for (var i = 0; i < MAPS.length; i++) {
     opt = document.createElement('option');
     opt.value = MAPS[i].id;
     opt.innerHTML = MAPS[i].name;
-    select.appendChild(opt);
+    selectRace.appendChild(opt);
+    opt = document.createElement('option');
+    opt.value = MAPS[i].id;
+    opt.innerHTML = MAPS[i].name;
+    selectTimeTrial.appendChild(opt);
 }
 
 function openTab(evt, tabName) {
