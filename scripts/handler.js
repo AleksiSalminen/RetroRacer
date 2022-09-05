@@ -104,12 +104,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
     //---------------------------------------------------------------------------
 
     playMusic: function () {
-        var src = "";
-        for (let i = 0;i < maps.length;i++) {
-            if (maps[i].id === map) {
-                src = "./maps/" + map + "/theme.mp3"
-            }
-        }
+        var src = "./maps/" + map.id + "/theme.mp3";
         music = new Audio(src);
         //music.preservesPitch = false;
         music.playbackRate = 1.1;

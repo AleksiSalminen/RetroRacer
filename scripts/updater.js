@@ -160,12 +160,19 @@ function update(dt) {
 //-------------------------------------------------------------------------
 
 function updateCars(dt, playerSegment, playerW) {
-    var n, car, oldSegment, newSegment;
+    var n, car, oldSegment, newSegment, oldZ;
     for (n = 0; n < cars.length; n++) {
         car = cars[n];
         oldSegment = findSegment(car.z);
         car.offset = car.offset + updateCarOffset(car, oldSegment, playerSegment, playerW);
+        oldZ = car.z;
         car.z = Util.increase(car.z, dt * car.speed, trackLength);
+        if (oldZ > car.z) {
+            car.lap++;
+            if (car.lap > laps) {
+                car.finished = true;
+            }
+        }
         car.percent = Util.percentRemaining(car.z, segmentLength); // useful for interpolation during rendering phase
         newSegment = findSegment(car.z);
         for (let i = 0; i < oldSegment.cars.length; i++) {
@@ -235,7 +242,7 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
 function resetCars() {
     cars = [];
     var calcs = [];
-    var n, car, segment, offset, z, sprite, speed, calc;
+    var n, car, segment, offset, z, sprite, speed, calc, name, rand;
     for (var n = 0; n < totalCars; n++) {
         offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
         // Make every car start at the startline (that's why 0)
@@ -250,7 +257,10 @@ function resetCars() {
         }
         calcs.push(calc);
         speed = speedCap * (calc/100);
-        car = { offset: offset, z: z, sprite: sprite, speed: speed };
+        // Get random name from list
+        rand = Math.floor(Math.random() * map.RACER_NAMES.length);
+        name = map.RACER_NAMES[rand];
+        car = { offset: offset, z: z, sprite: sprite, speed: speed, name: name, lap: 1, finished: false };
         segment = findSegment(car.z);
         segment.cars.push(car);
         cars.push(car);

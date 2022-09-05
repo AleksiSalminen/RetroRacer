@@ -6,15 +6,14 @@ document.title = 'Retro Racing Game';
 
 var searchParams = window.location.search.substring(1).split('&');
 var map = searchParams[0].split('=')[1];
+for (let i = 0;i < maps.length;i++) { if (maps[i].id === map) { map = maps[i];}}
 var mode = searchParams[1].split('=')[1];
 var lap = 1;
 var laps = parseInt(searchParams[2].split('=')[1]);
 var playerSpeedPercent = parseFloat(searchParams[3].split('=')[1] / 100);
 var oCarSpeedLow = parseInt(searchParams[4].split('=')[1]);
 var oCarSpeedTop = parseInt(searchParams[5].split('=')[1]);
-if (oCarSpeedLow > oCarSpeedTop) {
-  var spd = oCarSpeedLow; oCarSpeedLow = oCarSpeedTop; oCarSpeedTop = spd;
-}
+if (oCarSpeedLow > oCarSpeedTop) { var spd = oCarSpeedLow; oCarSpeedLow = oCarSpeedTop; oCarSpeedTop = spd;}
 var totalCars = parseInt(searchParams[6].split('=')[1]);
 
 var KEY = {
@@ -30,12 +29,7 @@ var KEY = {
   ESC:   27
 };
 
-var COLORS = {};
-for (let i = 0;i < maps.length;i++) {
-  if (maps[i].id === map) {
-    COLORS = maps[i].COLORS;
-  }
-}
+var COLORS = map.COLORS;
 
 var BACKGROUND = {
   HILLS: { x:   5, y:   5, w: 1280, h: 480 },
@@ -142,12 +136,7 @@ var roadWidth = 3000;                    // actually half the roads width, easie
 var segmentLength = 200;                     // length of a single segment
 var rumbleLength = 3;                       // number of segments per red/white rumble strip
 var trackLength = null;                    // z length of entire track (computed)
-var lanes = 0;                       // number of lanes
-for (let i = 0;i < maps.length;i++) {
-    if (maps[i].id === map) {
-        lanes = maps[i].lanes;
-    }
-}
+var lanes = map.lanes;                       // number of lanes
 var fieldOfView = 140;                     // angle (degrees) for field of view
 var cameraHeight = 550;                    // z height of camera
 var cameraDepth = null;                    // z distance camera is from screen (computed)
@@ -190,7 +179,7 @@ Dom.get("restartLink").href = window.location.href;
 
 Game.run({
     canvas: canvas, render: render, update: update, step: step,
-    images: ["../maps/"+map+"/background", "../maps/"+map+"/sprites"],
+    images: ["../maps/"+map.id+"/background", "../maps/"+map.id+"/sprites"],
     keys: [
         { keys: [KEY.LEFT, KEY.A], mode: 'down', action: function () { keyLeft = true; } },
         { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function () { keyRight = true; } },
@@ -228,10 +217,5 @@ function reset(options) {
     resolution = height / 480;
 
     if ((segments.length == 0) || (options.segmentLength) || (options.rumbleLength))
-        for (let i = 0;i < maps.length;i++) {
-            if (maps[i].id === map) {
-                maps[i].resetRoad(); // only rebuild road when necessary
-                i = maps.length;
-            }
-        }
+      map.resetRoad(); // Only rebuild road if necessary
 }

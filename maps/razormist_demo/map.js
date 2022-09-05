@@ -16,6 +16,10 @@ maps.push({
         FINISH: { road: 'black',   grass: 'black',   rumble: 'black'                     }
     },
 
+    RACER_NAMES: [
+        "razormist", "Becky", "Tom", "Junnu", "Slim Mill", "Matti Meikäläinen"
+    ],
+
     addLowRollingHills: function (num, height) {
         num = num || ROAD.LENGTH.SHORT;
         height = height || ROAD.HILL.LOW;
