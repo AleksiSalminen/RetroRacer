@@ -118,7 +118,10 @@ function render() {
         postShake();
     }
 
+    Render.polygon(ctx, 0, 0, 0, 10, window.width, 10, window.width, 0, '#000000');
     Render.polygon(ctx, 0, window.height, 0, window.height-50, window.width, window.height-50, window.width, window.height, '#000000');
+    Render.polygon(ctx, 0, 0, 0, window.height, 6, window.height, 6, 0, '#000000');
+    Render.polygon(ctx, window.width, 0, window.width, window.height, window.width-6, window.height, window.width-6, 0, '#000000');
 
     if (!playing && !finished && !wrecked) {
         Render.countdown(ctx, countDown);
@@ -129,11 +132,11 @@ function render() {
     else if (wrecked) {
         Render.wrecked(ctx);
     }
-    else if (paused) {
-        Render.paused(ctx);
-    }
     else {
         Render.data(ctx, place);
+    }
+    if (paused) {
+        Render.paused(ctx);
     }
 }
 

@@ -40,7 +40,9 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
     },
 
     pause: function () {
-        paused = !paused;
+        if (!wrecked && !finished) {
+            paused = !paused;
+        }
     },
 
     //---------------------------------------------------------------------------
@@ -109,7 +111,7 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
         //music.preservesPitch = false;
         music.playbackRate = 1.1;
         music.loop = true;
-        music.volume = 0.5;
+        music.volume = 1.0;
         music.play();
     },
 

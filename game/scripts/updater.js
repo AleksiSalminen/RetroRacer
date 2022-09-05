@@ -331,6 +331,6 @@ function muteSound() {
 }
 
 function updateSound() {
-    music.volume = 0.5 * volume/100
+    music.volume = 1.0 * volume/100
     updateEngineSound(speed/maxSpeed);
 }

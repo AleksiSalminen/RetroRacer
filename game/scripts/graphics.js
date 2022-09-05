@@ -79,7 +79,7 @@ var Render = {
         ctx.beginPath();
         ctx.rect(x - dist / 2, y - 50, dist, dist / 2);
         ctx.stroke();
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = "white";
         ctx.font = "20px Arial";
         ctx.fillText(place, x - dist / 2 + 5, y - 33);
     },
@@ -295,34 +295,41 @@ var Render = {
         if (place) {
             var countHeight = 60;
             ctx.fillStyle = "black";
-            ctx.globalAlpha = 0.4;
+            ctx.globalAlpha = 0.1;
             ctx.fillRect(0, 0, canvas.width, countHeight);
+            ctx.fillRect(0, 0, canvas.width, countHeight+3);
+            ctx.fillRect(0, 0, canvas.width, countHeight+6);
+            ctx.fillRect(0, 0, canvas.width, countHeight+9);
+            ctx.fillRect(0, 0, canvas.width, countHeight+12);
             ctx.globalAlpha = 1.0;
-            ctx.fillStyle = 'white';
+
+            ctx.fillStyle = 'rgb(0, 256, 256)';
 
             if (mode === "time_trial") {
-                ctx.font = "25px Arial";
-                ctx.fillText("Time: " + formatTime(currentLapTime), 20, 40);
-                ctx.fillText("Last: " + formatTime(lastLapTime), 250, 40);
-                ctx.fillText("Best: " + formatTime(fastLapTime), 480, 40);
+                ctx.font = "20px Good Times";
+                ctx.fillText("Time: " + formatTime(currentLapTime), 20, 50);
+                ctx.fillText("Last: " + formatTime(lastLapTime), 250, 50);
+                ctx.fillText("Best: " + formatTime(fastLapTime), 480, 50);
             }
             else if (mode === "race") {
-                ctx.font = "50px Arial";
+                ctx.font = "40px Good Times";
                 ctx.fillText(place, canvas.width / 2 - 90, 50);
-                ctx.font = "30px Arial";
+                ctx.font = "30px Good Times";
                 ctx.fillText("/" + (cars.length + 1), canvas.width / 2, 50);
-                ctx.fillText("Lap:", 10, 40);
-                ctx.font = "50px Arial";
-                ctx.fillText(lap, 70, 50);
-                ctx.font = "30px Arial";
-                ctx.fillText("/" + laps, 130, 50);
+                ctx.fillText("Lap:", 15, 50);
+                ctx.font = "35px Good Times";
+                ctx.fillText(lap, 110, 50);
+                ctx.font = "30px Good Times";
+                ctx.fillText("/" + laps, 155, 50);
             }
 
             var speedInKMH = 5 * Math.round(speed / 500) * 1.6;
-            ctx.font = "50px Arial";
-            ctx.fillText(speedInKMH, 850, 50);
-            ctx.font = "30px Arial";
-            ctx.fillText("km/h", 940, 50);
+            ctx.font = "35px Good Times";
+            ctx.fillText(speedInKMH, 780, 50);
+            ctx.font = "25px Good Times";
+            ctx.fillText("km/h", 900, 50);
+
+            ctx.globalAlpha = 1.0;
 
             //Render.throttleMeter2(ctx);
 
@@ -401,18 +408,18 @@ var Render = {
             canvas.width, countHeight
         );
 
-        ctx.fillStyle = 'white';
-        ctx.font = "100px Arial";
+        ctx.fillStyle = 'rgb(0, 256, 256)';
+        ctx.font = "60px Good Times";
         var text = "Finished " + finishedPlace;
         if (finishedPlace === 1) { text += "st" }
         else if (finishedPlace === 2) { text += "nd" }
         else if (finishedPlace === 3) { text += "rd" }
         else { text += "th" }
-        ctx.fillText(text, canvas.width / 2 - 300, canvas.height / 2 - countHeight / 3);
+        ctx.fillText(text, canvas.width / 2 - 250, canvas.height / 2 - countHeight / 2.5);
 
-        ctx.font = "35px Arial";
+        ctx.font = "25px Good Times";
         var text2 = "Continue in " + Math.ceil(continueCountdown / 100)
-        ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 3 + 50);
+        ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 2.5 + 50);
     },
 
     //---------------------------------------------------------------------------
@@ -427,21 +434,19 @@ var Render = {
             canvas.width, countHeight
         );
 
-        ctx.fillStyle = 'white';
-        ctx.font = "100px Arial";
+        ctx.fillStyle = "rgb(0, 256, 256)";
+        ctx.font = "60px Good Times";
         var text = "Wrecked"
-        ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 3);
+        ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 2.5);
 
-        ctx.font = "35px Arial";
+        ctx.font = "25px Good Times";
         var text2 = "Continue in " + Math.ceil(continueCountdown / 100)
-        ctx.fillText(text2, canvas.width / 2 - 100, canvas.height / 2 - countHeight / 3 + 50);
+        ctx.fillText(text2, canvas.width / 2 - 115, canvas.height / 2 - countHeight / 2.5 + 50);
     },
 
     //---------------------------------------------------------------------------
 
     paused: function (ctx) {
-        Render.data(ctx, place);
-
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(
@@ -449,10 +454,10 @@ var Render = {
             canvas.width, countHeight
         );
 
-        ctx.fillStyle = 'white';
-        ctx.font = "100px Arial";
+        ctx.fillStyle = "rgb(0, 256, 256)";
+        ctx.font = "60px Good Times";
         var text = "Paused"
-        ctx.fillText(text, canvas.width / 2 - 180, canvas.height / 2 - countHeight / 3);
+        ctx.fillText(text, canvas.width / 2 - 150, canvas.height / 2 - countHeight / 3);
 
     },
 
@@ -465,9 +470,9 @@ var Render = {
             0, canvas.height / 2 - countHeight,
             canvas.width, countHeight
         );
-        ctx.fillStyle = 'white';
-        ctx.font = "100px Arial";
-        ctx.fillText(Math.ceil(count / 100), canvas.width / 2 - 25, canvas.height / 2 - countHeight / 3);
+        ctx.fillStyle = "rgb(0, 256, 256)";
+        ctx.font = "80px Good Times";
+        ctx.fillText(Math.ceil(count / 100), canvas.width / 2 - 45, canvas.height / 2 - countHeight / 3);
     },
 
     rumbleWidth: function (projectedRoadWidth, lanes) { return projectedRoadWidth / Math.max(6, 2 * lanes); },
