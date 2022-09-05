@@ -331,37 +331,42 @@ var Render = {
     },
 
     throttleMeter1: function (ctx) {
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "rgb(0, 256, 256)";
-        var pillarHeight = speed / maxSpeed * 450;
-        var colorHeight = 15;
-        var partHeight = 20;
-        var maxPillars = Math.ceil(450 / colorHeight);
-        var pillars = Math.floor(pillarHeight / colorHeight);
-        for (let i = 0; i < pillars; i++) {
-            ctx.fillRect(canvas.width - 25 - i * 3 - 2, canvas.height - 100 - i * partHeight - 2, i * 3 + 5 + 4, colorHeight + 4);
-            ctx.fillRect(canvas.width - 25 - i * 3, canvas.height - 100 - i * partHeight, i * 3 + 5, colorHeight);
-            ctx.fillRect(canvas.width - 25 - i * 3 + 2, canvas.height - 100 - i * partHeight + 2, i * 3 + 5 - 4, colorHeight - 4);
-        }
-        var remainder = pillarHeight % colorHeight;
-        ctx.fillRect(canvas.width - 25 - pillars * 3 - 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight - 2, pillars * 3 + 5 + 4, remainder + 4);
-        ctx.fillRect(canvas.width - 25 - pillars * 3, canvas.height - 100 - pillars * partHeight - remainder + colorHeight, pillars * 3 + 5, remainder);
-        ctx.fillRect(canvas.width - 25 - pillars * 3 + 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight + 2, pillars * 3 + 5 - 4, remainder - 4);
+        if (speed > 0) {
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "rgb(0, 256, 256)";
+            var maxHeight = 450;
+            var pillarHeight = speed / maxSpeed * maxHeight;
+            var colorHeight = 15;
+            var partHeight = 20;
+            var maxPillars = Math.ceil(maxHeight / colorHeight);
+            var pillars = Math.floor(pillarHeight / colorHeight);
+            for (let i = 0; i < pillars; i++) {
+                ctx.fillRect(canvas.width - 25 - i * 3 - 2, canvas.height - 100 - i * partHeight - 2, i * 3 + 5 + 4, colorHeight + 4);
+                ctx.fillRect(canvas.width - 25 - i * 3, canvas.height - 100 - i * partHeight, i * 3 + 5, colorHeight);
+                ctx.fillRect(canvas.width - 25 - i * 3 + 2, canvas.height - 100 - i * partHeight + 2, i * 3 + 5 - 4, colorHeight - 4);
+            }
+            if (Math.floor(pillarHeight / colorHeight) < Math.floor(maxHeight / colorHeight)) {
+                var remainder = pillarHeight % colorHeight;
+                ctx.fillRect(canvas.width - 25 - pillars * 3 - 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight - 2, pillars * 3 + 5 + 4, remainder + 4);
+                ctx.fillRect(canvas.width - 25 - pillars * 3, canvas.height - 100 - pillars * partHeight - remainder + colorHeight, pillars * 3 + 5, remainder);
+                ctx.fillRect(canvas.width - 25 - pillars * 3 + 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight + 2, pillars * 3 + 5 - 4, remainder - 4);
+            }
 
-        if (speed / maxSpeed === 1) {
-            ctx.globalAlpha = 0.6;
-            ctx.beginPath();
-            ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
-            ctx.lineWidth = 6;
-            ctx.strokeStyle = 'rgb(0, 256, 256)';
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = 'rgb(0, 256, 256)';
-            ctx.stroke();
+            if (speed / maxSpeed === 1) {
+                ctx.globalAlpha = 0.6;
+                ctx.beginPath();
+                ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = 'rgb(0, 256, 256)';
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = 'rgb(0, 256, 256)';
+                ctx.stroke();
+            }
+            ctx.globalAlpha = 1.0;
         }
-        ctx.globalAlpha = 1.0;
     },
 
     throttleMeter2: function (ctx) {
