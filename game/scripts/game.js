@@ -35,6 +35,7 @@ var KEY = {
   W:     87,
   C:     67,
   Q:     81,
+  SPACE: 32,
   TAB:    9,
   ESC:   27
 };
@@ -202,7 +203,7 @@ Game.run({
         { keys: [KEY.UP, KEY.W], mode: 'up', action: function () { keyFaster = false; } },
         { keys: [KEY.DOWN, KEY.S], mode: 'up', action: function () { keySlower = false; } },
         { keys: [KEY.DOWN, KEY.C], mode: 'down', action: function () { Game.changeCamera(); } },
-        { keys: [KEY.DOWN, KEY.Q], mode: 'down', action: function () { Game.pause(); } }
+        { keys: [KEY.DOWN, KEY.SPACE], mode: 'down', action: function () { Game.pause(); } }
     ],
     ready: function (images) {
         background = images[0];
