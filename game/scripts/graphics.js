@@ -164,7 +164,10 @@ var Render = {
 
         var sprite;
         if (cameraView === 1) {
-            if (steer < 0)
+            if (wrecked || paused) {
+                sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
+            }
+            else if (steer < 0)
                 sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_LEFT : SPRITES.PLAYER_LEFT;
             else if (steer > 0)
                 sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_RIGHT : SPRITES.PLAYER_RIGHT;
@@ -172,7 +175,10 @@ var Render = {
                 sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
         }
         else if (cameraView === 2) {
-            if (steer < 0)
+            if (wrecked || paused) {
+                sprite = SPRITES.PLAYER_FPS_STRAIGHT;
+            }
+            else if (steer < 0)
                 sprite = SPRITES.PLAYER_FPS_LEFT;
             else if (steer > 0)
                 sprite = SPRITES.PLAYER_FPS_RIGHT;
@@ -180,7 +186,10 @@ var Render = {
                 sprite = SPRITES.PLAYER_FPS_STRAIGHT;
         }
         else {
-            if (steer < 0)
+            if (wrecked || paused) {
+                sprite = SPRITES.PLAYER_FPS_STRAIGHT;
+            }
+            else if (steer < 0)
                 sprite = SPRITES.PLAYER_FPS_LEFT;
             else if (steer > 0)
                 sprite = SPRITES.PLAYER_FPS_RIGHT;
@@ -189,47 +198,11 @@ var Render = {
         }
 
         Render.sprite(ctx, width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
-    
-        if (cameraView === 1 && !wrecked && !finished) {
-            ctx.globalAlpha = 0.2;
-            ctx.fillStyle = "rgb(0, 256, 256)";
-            var renderX = canvas.width/2;
-            if      (keyLeft)  { renderX += 35; }
-            else if (keyRight) { renderX -= 35; }
 
-            ctx.beginPath();
-            ctx.ellipse(renderX-50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(renderX-50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(renderX-50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(renderX+50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(renderX+50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(renderX+50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
-            ctx.fill();
-
-            for (let i = 0;i < Math.ceil(10*speed/maxSpeed);i++) {
-                var randY = 150*Math.random();
-                var randSize = 75*Math.random();
-                var incr = Math.floor(randY/2);
-                ctx.beginPath();
-                ctx.ellipse(renderX-50-randY, 630+randY, 50+incr+randSize, 60+incr+randSize, Math.PI / 2, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.ellipse(renderX+50+randY, 630+randY, 50+incr+randSize, 60+incr+randSize, Math.PI / 2, 0, 2 * Math.PI);
-                ctx.fill();
-            }
-            ctx.globalAlpha = 1.0;
+        if (cameraView === 1 && speed > 0 && !wrecked && !finished) {
+            Render.exhaust(ctx);
         }
-        
+
         if (durability <= maxDurability * 3 / 4) {
             if (durability <= maxDurability * 3 / 4 && durability > maxDurability * 2 / 4) {
                 if (cameraView === 1) {
@@ -276,6 +249,46 @@ var Render = {
         drawSmoke(density);
     },
 
+    exhaust: function (ctx) {
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = "rgb(0, 256, 256)";
+        var renderX = canvas.width / 2;
+        if (keyLeft) { renderX += 35; }
+        else if (keyRight) { renderX -= 35; }
+
+        ctx.beginPath();
+        ctx.ellipse(renderX - 50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(renderX - 50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(renderX - 50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(renderX + 50, 630, 60, 70, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(renderX + 50, 630, 50, 60, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(renderX + 50, 630, 40, 50, Math.PI / 2, 0, 2 * Math.PI);
+        ctx.fill();
+
+        for (let i = 0; i < Math.ceil(10 * speed / maxSpeed); i++) {
+            var randY = 150 * Math.random();
+            var randSize = 75 * Math.random();
+            var incr = Math.floor(randY / 2);
+            ctx.beginPath();
+            ctx.ellipse(renderX - 50 - randY, 630 + randY, 50 + incr + randSize, 60 + incr + randSize, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(renderX + 50 + randY, 630 + randY, 50 + incr + randSize, 60 + incr + randSize, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+    },
+
     //---------------------------------------------------------------------------
 
     data: function (ctx, place) {
@@ -286,15 +299,24 @@ var Render = {
             ctx.fillRect(0, 0, canvas.width, countHeight);
             ctx.globalAlpha = 1.0;
             ctx.fillStyle = 'white';
-            ctx.font = "50px Arial";
-            ctx.fillText(place, canvas.width / 2 - 90, 50);
-            ctx.font = "30px Arial";
-            ctx.fillText("/" + (cars.length + 1), canvas.width / 2, 50);
-            ctx.fillText("Lap:", 10, 40);
-            ctx.font = "50px Arial";
-            ctx.fillText(lap, 70, 50);
-            ctx.font = "30px Arial";
-            ctx.fillText("/" + laps, 130, 50);
+
+            if (mode === "time_trial") {
+                ctx.font = "25px Arial";
+                ctx.fillText("Time: " + formatTime(currentLapTime), 20, 40);
+                ctx.fillText("Last: " + formatTime(lastLapTime), 250, 40);
+                ctx.fillText("Best: " + formatTime(fastLapTime), 480, 40);
+            }
+            else if (mode === "race") {
+                ctx.font = "50px Arial";
+                ctx.fillText(place, canvas.width / 2 - 90, 50);
+                ctx.font = "30px Arial";
+                ctx.fillText("/" + (cars.length + 1), canvas.width / 2, 50);
+                ctx.fillText("Lap:", 10, 40);
+                ctx.font = "50px Arial";
+                ctx.fillText(lap, 70, 50);
+                ctx.font = "30px Arial";
+                ctx.fillText("/" + laps, 130, 50);
+            }
 
             var speedInKMH = 5 * Math.round(speed / 500) * 1.6;
             ctx.font = "50px Arial";
@@ -311,30 +333,30 @@ var Render = {
     throttleMeter1: function (ctx) {
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = "rgb(0, 256, 256)";
-        var pillarHeight = speed/maxSpeed * 450;
+        var pillarHeight = speed / maxSpeed * 450;
         var colorHeight = 15;
         var partHeight = 20;
         var maxPillars = Math.ceil(450 / colorHeight);
-        var pillars = Math.floor(pillarHeight/colorHeight);
-        for (let i = 0;i < pillars;i++) {
-            ctx.fillRect(canvas.width-25-i*3-2, canvas.height- 100 - i*partHeight-2, i*3+5+4, colorHeight+4);
-            ctx.fillRect(canvas.width-25-i*3, canvas.height- 100 - i*partHeight, i*3+5, colorHeight);
-            ctx.fillRect(canvas.width-25-i*3+2, canvas.height- 100 - i*partHeight+2, i*3+5-4, colorHeight-4);
+        var pillars = Math.floor(pillarHeight / colorHeight);
+        for (let i = 0; i < pillars; i++) {
+            ctx.fillRect(canvas.width - 25 - i * 3 - 2, canvas.height - 100 - i * partHeight - 2, i * 3 + 5 + 4, colorHeight + 4);
+            ctx.fillRect(canvas.width - 25 - i * 3, canvas.height - 100 - i * partHeight, i * 3 + 5, colorHeight);
+            ctx.fillRect(canvas.width - 25 - i * 3 + 2, canvas.height - 100 - i * partHeight + 2, i * 3 + 5 - 4, colorHeight - 4);
         }
         var remainder = pillarHeight % colorHeight;
-        ctx.fillRect(canvas.width-25-pillars*3-2, canvas.height- 100 - pillars*partHeight - remainder + colorHeight-2, pillars*3+5+4, remainder+4);
-        ctx.fillRect(canvas.width-25-pillars*3, canvas.height- 100 - pillars*partHeight - remainder + colorHeight, pillars*3+5, remainder);
-        ctx.fillRect(canvas.width-25-pillars*3+2, canvas.height- 100 - pillars*partHeight - remainder + colorHeight+2, pillars*3+5-4, remainder-4);
-        
-        if (speed/maxSpeed === 1) {
+        ctx.fillRect(canvas.width - 25 - pillars * 3 - 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight - 2, pillars * 3 + 5 + 4, remainder + 4);
+        ctx.fillRect(canvas.width - 25 - pillars * 3, canvas.height - 100 - pillars * partHeight - remainder + colorHeight, pillars * 3 + 5, remainder);
+        ctx.fillRect(canvas.width - 25 - pillars * 3 + 2, canvas.height - 100 - pillars * partHeight - remainder + colorHeight + 2, pillars * 3 + 5 - 4, remainder - 4);
+
+        if (speed / maxSpeed === 1) {
             ctx.globalAlpha = 0.6;
             ctx.beginPath();
-            ctx.arc(canvas.width-50, canvas.height-100, 10, 0, 2 * Math.PI, false);
+            ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
             ctx.lineWidth = 6;
             ctx.strokeStyle = 'rgb(0, 256, 256)';
             ctx.stroke();
             ctx.beginPath();
-            ctx.arc(canvas.width-50, canvas.height-100, 10, 0, 2 * Math.PI, false);
+            ctx.arc(canvas.width - 50, canvas.height - 100, 10, 0, 2 * Math.PI, false);
             ctx.lineWidth = 10;
             ctx.strokeStyle = 'rgb(0, 256, 256)';
             ctx.stroke();
@@ -392,7 +414,7 @@ var Render = {
 
     wrecked: function (ctx) {
         Render.data(ctx, finishedPlace);
-        
+
         var countHeight = 200;
         ctx.fillStyle = "black";
         ctx.fillRect(

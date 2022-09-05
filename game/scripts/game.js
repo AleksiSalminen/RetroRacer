@@ -2,21 +2,27 @@
 // RACING GAME VARIABLES
 //=============================================================================
 
-var searchParams = window.location.search.substring(1).split('&');
-var mapID = searchParams[0].split('=')[1];
 var MODES = {
   race: "Race",
-  free_drive: "Free Drive"
+  time_trial: "Time Trial"
 }
-var mode = searchParams[1].split('=')[1];
+
+var mode, laps, playerSpeedPercent, oCarSpeedLow, oCarSpeedTop, totalCars;
+var term, value;
+var searchParams = window.location.search.substring(1).split('&');
+searchParams.forEach((param) => {
+  term = param.split('=')[0];
+  value = param.split('=')[1];
+  if (term === "mode")          { mode = value; }
+  else if (term === "laps")     { laps = parseInt(value); }
+  else if (term === "speed0")   { playerSpeedPercent = parseFloat(value/100); }
+  else if (term === "speed1")   { oCarSpeedLow = parseInt(value); }
+  else if (term === "speed2")   { oCarSpeedTop = parseInt(value); }
+  else if (term === "quantity") { totalCars = parseInt(value); }
+});
 document.title = MODES[mode] + " - " + map.name + " - Retro Racing Game";
-var lap = 1;
-var laps = parseInt(searchParams[2].split('=')[1]);
-var playerSpeedPercent = parseFloat(searchParams[3].split('=')[1] / 100);
-var oCarSpeedLow = parseInt(searchParams[4].split('=')[1]);
-var oCarSpeedTop = parseInt(searchParams[5].split('=')[1]);
 if (oCarSpeedLow > oCarSpeedTop) { var spd = oCarSpeedLow; oCarSpeedLow = oCarSpeedTop; oCarSpeedTop = spd;}
-var totalCars = parseInt(searchParams[6].split('=')[1]);
+if (mode === "time_trial") { laps = 0; }
 
 var KEY = {
   LEFT:  37,
@@ -28,6 +34,8 @@ var KEY = {
   S:     83,
   W:     87,
   C:     67,
+  Q:     81,
+  TAB:    9,
   ESC:   27
 };
 
@@ -110,6 +118,7 @@ var screenShakeOn = true;
 var volume = 100;
 var music;
 
+var lap = 1;
 var maxDurability = 100;
 var durability = maxDurability;
 var wrecked = false;
@@ -158,7 +167,8 @@ var decel = 0;             // 'natural' deceleration rate when neither accelerat
 var offRoadDecel = -maxSpeed / 2;             // off road deceleration is somewhere in between
 var offRoadLimit = maxSpeed / 4;             // limit when off road deceleration no longer applies (e.g. you can always go at least this speed even when off road)
 var currentLapTime = 0;                       // current lap time
-var lastLapTime = null;                    // last lap time
+var lastLapTime = 0;                    // last lap time
+var fastLapTime = 0;
 var crashToObstacle = false;
 var timeSinceCrash = 0;
 var crashTimer = 200;
@@ -192,7 +202,7 @@ Game.run({
         { keys: [KEY.UP, KEY.W], mode: 'up', action: function () { keyFaster = false; } },
         { keys: [KEY.DOWN, KEY.S], mode: 'up', action: function () { keySlower = false; } },
         { keys: [KEY.DOWN, KEY.C], mode: 'down', action: function () { Game.changeCamera(); } },
-        { keys: [KEY.DOWN, KEY.ESC], mode: 'down', action: function () { Game.pause(); } }
+        { keys: [KEY.DOWN, KEY.Q], mode: 'down', action: function () { Game.pause(); } }
     ],
     ready: function (images) {
         background = images[0];

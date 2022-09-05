@@ -129,15 +129,15 @@ function update(dt) {
         if (position > playerZ) {
             if (currentLapTime && (startPosition < playerZ)) {
                 lap++;
-                if (lap > laps) {
+                if (laps > 0 && lap > laps) {
                     finished = true;
                     hasControl = false;
                     finishedPlace = place;
                 }
                 lastLapTime = currentLapTime;
                 currentLapTime = 0;
-                if (lastLapTime <= Util.toFloat(Dom.storage.fast_lap_time)) {
-                    Dom.storage.fast_lap_time = lastLapTime;
+                if (fastLapTime === 0 || lastLapTime <= fastLapTime) {
+                    fastLapTime = lastLapTime;
                 }
             }
             else {
@@ -169,7 +169,7 @@ function updateCars(dt, playerSegment, playerW) {
         car.z = Util.increase(car.z, dt * car.speed, trackLength);
         if (oldZ > car.z) {
             car.lap++;
-            if (car.lap > laps) {
+            if (laps > 0 && car.lap > laps) {
                 car.finished = true;
             }
         }
@@ -285,10 +285,7 @@ function formatTime(dt) {
     var minutes = Math.floor(dt / 60);
     var seconds = Math.floor(dt - (minutes * 60));
     var tenths = Math.floor(10 * (dt - Math.floor(dt)));
-    if (minutes > 0)
-        return minutes + "." + (seconds < 10 ? "0" : "") + seconds + "." + tenths;
-    else
-        return seconds + "." + tenths;
+    return (minutes < 10 ? "0" : "") + minutes + "." + (seconds < 10 ? "0" : "") + seconds + "." + tenths;
 }
 
 //-------------------------------------------------------------------------
