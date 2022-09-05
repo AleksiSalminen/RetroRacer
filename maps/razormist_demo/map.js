@@ -1,8 +1,9 @@
-var maps = [];
 
-maps.push({
+var map = {
 
     id: "razormist_demo",
+
+    name: "'razormist' Demo",
 
     lanes: 3,
 
@@ -135,4 +136,4 @@ maps.push({
 
     }
 
-});
+};

@@ -1,7 +1,9 @@
 
-maps.push({
+var map = {
 
     id: "city",
+
+    name: "City",
 
     lanes: 4,
 
@@ -123,4 +125,4 @@ maps.push({
 
     }
 
-});
+};

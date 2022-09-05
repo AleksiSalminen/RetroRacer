@@ -2,12 +2,14 @@
 // RACING GAME VARIABLES
 //=============================================================================
 
-document.title = 'Retro Racing Game';
-
 var searchParams = window.location.search.substring(1).split('&');
-var map = searchParams[0].split('=')[1];
-for (let i = 0;i < maps.length;i++) { if (maps[i].id === map) { map = maps[i];}}
+var mapID = searchParams[0].split('=')[1];
+var MODES = {
+  race: "Race",
+  free_drive: "Free Drive"
+}
 var mode = searchParams[1].split('=')[1];
+document.title = MODES[mode] + " - " + map.name;
 var lap = 1;
 var laps = parseInt(searchParams[2].split('=')[1]);
 var playerSpeedPercent = parseFloat(searchParams[3].split('=')[1] / 100);

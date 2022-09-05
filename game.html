@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link href="./styles/common.css" rel="stylesheet" type="text/css" />
+  <link href="./styles/game.css" rel="stylesheet" type="text/css" />
 </head> 
 
 <body> 
@@ -34,23 +34,11 @@
     <canvas id="canvas">
       This game cannot be run because your browser does not support the &lt;HTML Canvas&gt; element
     </canvas>
-    Loading...
   </div>
   
 
-  <!-- Import map settings scripts -->
-  <script src="./maps/razormist_demo/map.js"></script>
-  <script src="./maps/city/map.js"></script>
-
-  <!-- Import the main scripts -->
-  <script src="./scripts/handler.js"></script>
-  <script src="./scripts/helper.js"></script>
-  <script src="./scripts/updater.js"></script>
-  <script src="./scripts/graphics.js"></script>
-  <script src="./scripts/view.js"></script>
-  <script src="./scripts/road.js"></script>
-  <script src="./scripts/game.js"></script>
-  <script src="./scripts/smoke.js"></script>
+  <!-- This script handles importing all the other used scripts -->
+  <script src="./scripts/init.js"></script>
 
 </body> 
 </html>
