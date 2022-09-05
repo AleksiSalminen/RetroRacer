@@ -1,57 +1,66 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 
 <html>
+
 <head>
   <title>Main Menu - Retro Racing Game</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-</head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="./styles/main_menu.css" rel="stylesheet" type="text/css" />
+</head>
 
-<body> 
+<body>
+  <h2>--- Main Menu - Retro Racing Game ---</h2>
+  <p>Play the <a href="../original/index.html">ORIGINAL</a> "2.5D Road Racing Game" by <i>razormist</i></p>
+  <p>See more: <a target="_blank"
+      href="https://www.sourcecodester.com/javascript/15081/25d-road-racing-game-using-javascript-free-source-code.html">https://www.sourcecodester.com/javascript/15081/25d-road-racing-game-using-javascript-free-source-code.html</a>
+  </p>
 
-  <form action="../game/game.html" method="GET">
-    <h2>--- Main Menu - Retro Racing Game ---</h2>
-    <p>Play the <a href="../original/index.html">ORIGINAL</a> "2.5D Road Racing Game" by <i>razormist</i></p>
-    <p>See more: <a target="_blank" href="https://www.sourcecodester.com/javascript/15081/25d-road-racing-game-using-javascript-free-source-code.html">https://www.sourcecodester.com/javascript/15081/25d-road-racing-game-using-javascript-free-source-code.html</a></p>
-    <h2>-------------</h2>
+  <!-- Tab selector -->
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'race')" id="defaultOpen">Race</button>
+    <button class="tablinks" onclick="openTab(event, 'free_drive')">Free Drive</button>
+  </div>
 
-    <h3>- Game -</h3>
-    <b>MAP:</b>
-    <select name="map" id="map_select"></select>
-    &nbsp; <b>MODE:</b>
-    <select name="mode">
-      <option value="race">Race</option>
-    </select>
-    <br/><br/>
-    <label for="laps"><b>LAPS</b> (between 1 and 500):</label>
-    <input type="number" name="laps" min="1" max="500" value="3">
-    <h2>-------------</h2>
+  <div id="race" class="tabcontent">
+    <form action="../game/game.html" method="GET">
+      <h3>- Game -</h3>
+      <b>MAP:</b>
+      <select name="map" id="map_select"></select>
+      <input type="text" name="mode" value="race" style="display:none;" />
+      <br /><br />
+      <label for="laps"><b>LAPS</b> (between 1 and 500):</label>
+      <input type="number" name="laps" min="1" max="500" value="3">
+      <h2>-------------</h2>
 
-    <h3>- Player -</h3>
-    <div>
-      <b>MAX SPEED</b>
-      <input type="range" min="1" max="100" value="90" class="slider" name="speed0">
-    </div>
+      <h3>- Player -</h3>
+      <div>
+        <b>MAX SPEED</b>
+        <input type="range" min="1" max="100" value="90" class="slider" name="speed0">
+      </div>
 
-    <h2>-------------</h2>
+      <h2>-------------</h2>
 
-    <h3>- Opponents -</h3>
-    <div>
-      <b>SPEED RANGE -> Slowest:</b>
-      <input type="range" min="1" max="100" value="50" class="slider" name="speed1">
-      <b>Fastest:</b>
-      <input type="range" min="1" max="100" value="90" class="slider" name="speed2">
-    </div>
-    <br/>
-    <label for="quantity"><b>QUANTITY</b> (between 1 and 300):</label>
-    <input type="number" name="quantity" min="1" max="300" value="50">
-    <h2>-------------</h2>
+      <h3>- Opponents -</h3>
+      <div>
+        <b>SPEED RANGE -> Slowest:</b>
+        <input type="range" min="1" max="100" value="50" class="slider" name="speed1">
+        <b>Fastest:</b>
+        <input type="range" min="1" max="100" value="90" class="slider" name="speed2">
+      </div>
+      <br />
+      <label for="quantity"><b>QUANTITY</b> (between 1 and 300):</label>
+      <input type="number" name="quantity" min="1" max="300" value="50">
+      <h2>-------------</h2>
 
-    <input type="submit" value="START" />
-  </form>
+      <input type="submit" value="START" />
+    </form>
+  </div>
+  <div id="free_drive" class="tabcontent"></div>
 
   <!-- Import the scripts -->
   <script src="../game/maps/maps.js"></script>
-  <script src="./scripts/index.js"></script>
+  <script src="./scripts/main_menu.js"></script>
 
-</body> 
+</body>
+
 </html>
