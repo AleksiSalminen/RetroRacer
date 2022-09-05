@@ -234,12 +234,21 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
 
 function resetCars() {
     cars = [];
+    var calcs = [];
     var n, car, segment, offset, z, sprite, speed, calc;
     for (var n = 0; n < totalCars; n++) {
         offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
+        // Make every car start at the startline (that's why 0)
         z = Math.floor(0 * segments.length) * segmentLength;
         sprite = Util.randomChoice(SPRITES.CARS);
-        calc = Math.floor(Math.random() * (oCarSpeedTop-oCarSpeedLow))+ oCarSpeedLow;
+        calc = Math.random() * (oCarSpeedTop-oCarSpeedLow) + oCarSpeedLow;
+        calc = Math.round(calc * 10000) / 10000;
+        // Make sure every car is given different speed
+        while (calcs.includes(calc)) {
+            calc = Math.random() * (oCarSpeedTop-oCarSpeedLow) + oCarSpeedLow;
+            calc = Math.round(calc * 10000) / 10000;
+        }
+        calcs.push(calc);
         speed = speedCap * (calc/100);
         car = { offset: offset, z: z, sprite: sprite, speed: speed };
         segment = findSegment(car.z);
