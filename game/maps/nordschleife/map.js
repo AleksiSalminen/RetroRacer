@@ -24,6 +24,7 @@ var map = {
     resetRoad: function () {
         segments = [];
         
+        /* Start *//*
         addRoad(50, 50, 50, 0, 100);
         addRoad(40, 40, 40, -20, 0);
         addRoad(70, 70, 70, 0, -20);
@@ -40,9 +41,28 @@ var map = {
         addRoad(40, 40, 40, -10, 10);
         addRoad(70, 70, 70, 0, 50);
         addRoad(50, 50, 50, 10, 40);
-        addRoad(50, 50, 50, -10, -50);
+        addRoad(50, 50, 50, -10, -50);*/
+
+        /* Bumpy straight *//*
         addRoad(70, 70, 70, 0, -50);
         addRoad(70, 70, 70, 0, 50);
+        addRoad(40, 40, 40, 3, -30);
+        addRoad(70, 70, 70, 0, 50);
+        addRoad(25, 25, 25, 0, 0);
+        addRoad(25, 25, 25, 6, 0);
+        addRoad(25, 25, 25, 6, 0);
+        addRoad(5, 5, 5, 0, 0);
+        addRoad(25, 25, 25, -4, 0);
+        addRoad(15, 15, 15, 0, 5);
+        addRoad(15, 15, 15, -4, 0);
+        addRoad(170, 170, 170, -2, -40);
+        addRoad(80, 80, 80, 0, 50);
+        addRoad(20, 20, 20, 0, 0);
+        addRoad(100, 100, 100, -4, -50);
+        addRoad(25, 25, 25, 0, 0);*/
+
+        /* Grande turn */
+        addRoad(120, 120, 120, 8, -120);
 
         this.resetSprites();
         resetCars();
