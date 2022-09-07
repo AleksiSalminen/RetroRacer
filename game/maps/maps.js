@@ -2,5 +2,5 @@
 const MAPS = [
     { id: "razormist_demo", name: "'razormist' Demo"},
     { id: "city", name: "City"},
-    { id: "nurburgring", name: "Nurburgring"}
+    { id: "nordschleife", name: "Nordschleife"}
 ];

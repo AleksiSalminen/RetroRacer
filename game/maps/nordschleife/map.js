@@ -1,9 +1,9 @@
 
 var map = {
 
-    id: "nurburgring",
+    id: "nordschleife",
 
-    name: "Nurburgring",
+    name: "Nordschleife",
 
     lanes: 0,
 
@@ -23,11 +23,26 @@ var map = {
 
     resetRoad: function () {
         segments = [];
-
-        addStraight(300);
-        addHill(300, 300);
-        addRoad(50, 50, 50, -6, -20);
-        addRoad(200, 200, -25, 0, -100);
+        
+        addRoad(50, 50, 50, 0, 100);
+        addRoad(40, 40, 40, -20, 0);
+        addRoad(70, 70, 70, 0, -20);
+        addRoad(80, 80, 80, 3, -30);
+        addRoad(40, 40, 40, 7, 5);
+        addRoad(5, 5, 5, 0, 0);
+        addRoad(50, 50, 50, -2, 3);
+        addRoad(50, 50, 50, 0, -2);
+        addRoad(15, 15, 15, -12, 0);
+        addRoad(30, 30, 30, 16, 0);
+        addRoad(50, 50, 50, 5, 3);
+        addRoad(40, 40, 40, -10, 5);
+        addRoad(20, 20, 20, 10, -10);
+        addRoad(40, 40, 40, -10, 10);
+        addRoad(70, 70, 70, 0, 50);
+        addRoad(50, 50, 50, 10, 40);
+        addRoad(50, 50, 50, -10, -50);
+        addRoad(70, 70, 70, 0, -50);
+        addRoad(70, 70, 70, 0, 50);
 
         this.resetSprites();
         resetCars();
