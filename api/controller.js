@@ -2,8 +2,22 @@ const fs = require("fs");
 
 
 function getCaptures(req, res) {
-    console.log("Get captures");
     res.end();
+}
+
+
+function getCapture(req, res) {
+    const id = req.params.id;
+    const map = req.query.map;
+    
+    fs.readFile("./captures/" + map + "/" + id + ".json",  {encoding: 'utf-8'}, function(err, data){
+        if (!err) {
+            res.json(JSON.parse(data));
+        }
+        else {
+            console.log(err);
+        }
+    });
 }
 
 
@@ -12,6 +26,7 @@ function addCapture(req, res) {
     const dir = "./captures/" + capture.map;
     fs.readdir(dir, (err, files) => {
         const fileID = files.length+1;
+        capture.id = fileID;
         const fileName = dir + "/" + fileID +".json";
         fs.writeFile(fileName, JSON.stringify(capture), function (err) {
             if (err) {
@@ -27,4 +42,4 @@ function addCapture(req, res) {
 }
 
 
-module.exports = { getCaptures, addCapture };
+module.exports = { getCaptures, getCapture, addCapture };

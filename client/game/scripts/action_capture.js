@@ -24,7 +24,6 @@ function finishCapture() {
     capture.map = map.name;
     capture.laps = laps;
     delete capture.latest;
-    console.log(capture);
 }
 
 function updateCapture() {
