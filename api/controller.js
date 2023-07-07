@@ -1,3 +1,4 @@
+const fs = require("fs");
 
 
 function getCaptures(req, res) {
@@ -7,7 +8,7 @@ function getCaptures(req, res) {
 
 
 function addCapture(req, res) {
-    console.log("Add capture");
+    console.log(req.body);
     res.json({});
 }
 

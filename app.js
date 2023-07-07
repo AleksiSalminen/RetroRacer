@@ -5,6 +5,7 @@ const router = require("./api/router.js").router;
 const ip = "localhost";
 const port = 3000;
 
+app.use(express.json());
 app.use("/", express.static("./client"));
 app.use("/api", router);
 

@@ -19,6 +19,7 @@ function hasActionChanged() {
 function finishCapture() {
     capture.rounds.push(capture.latest);
     capture.map = map.name;
+    capture.laps = laps;
     delete capture.latest;
     console.log(capture);
 }

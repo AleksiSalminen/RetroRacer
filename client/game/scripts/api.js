@@ -4,13 +4,13 @@ async function getCaptures() {
 }
 
 async function uploadCapture() {
-    const response = await fetch('/api/captures', {
+    fetch('/api/captures', {
         method: 'POST',
-        body: capture,
+        body: JSON.stringify(capture),
         headers: {
             'Content-Type': 'application/json'
         }
-    });
-    const resJson = await response.json();
-    console.log(resJson);
+    })
+    .then(response => response.json())
+    .then(console.log());
 }
