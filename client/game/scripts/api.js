@@ -3,7 +3,7 @@ async function getCapture(id, map) {
     fetch('/api/captures/' + id + "?" + new URLSearchParams({ map: map }))
     .then(response => response.json())
     .then(capture => {
-        console.log(capture);
+        return capture;
     });
 }
 
@@ -20,5 +20,5 @@ async function uploadCapture() {
         }
     })
     .then(response => response.json())
-    .then(console.log());
+    .then();
 }

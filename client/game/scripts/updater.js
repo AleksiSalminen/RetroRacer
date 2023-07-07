@@ -2,156 +2,177 @@
 // UPDATE THE GAME WORLD
 //=========================================================================
 
+function handleContinue() {
+    if (finished || wrecked) {
+        if (continueCountdown <= continueCount) {
+            location.href = "../free_play/free_play.html";
+        }
+        else {
+            continueCountdown--;
+        }
+    }
+}
+
+function updateCrashTimer() {
+    if (crashToObstacle && timeSinceCrash < crashTimer) {
+        timeSinceCrash++;
+    }
+    else if (crashToObstacle && timeSinceCrash >= crashTimer) {
+        crashToObstacle = false;
+        timeSinceCrash = 0;
+    }
+}
+
+function updatePlayerPos(dt, playerSegment, speedPercent) {
+    var dx = dt * turning * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
+    position = Util.increase(position, dt * speed, trackLength);
+
+    if (keyLeft)
+        playerX = playerX - dx;
+    else if (keyRight)
+        playerX = playerX + dx;
+
+    playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
+
+    if (keyFaster)
+        speed = Util.accelerate(speed, accel, dt);
+    else if (keySlower)
+        speed = Util.accelerate(speed, breaking, dt);
+    else
+        speed = Util.accelerate(speed, decel, dt);
+    
+    playerX = Util.limit(playerX, -3, 3);     // dont ever let it go too far out of bounds
+    speed = Util.limit(speed, 0, maxSpeed); // or exceed maxSpeed
+}
+
+function handleOffRoad(dt, playerSegment, playerW) {
+    var n, car, carW, sprite, spriteW;
+
+    if ((playerX < -1) || (playerX > 1)) {
+        if (speed > offRoadLimit)
+            speed = Util.accelerate(speed, offRoadDecel, dt);
+
+        for (n = 0; n < playerSegment.sprites.length; n++) {
+            sprite = playerSegment.sprites[n];
+            spriteW = sprite.source.w * SPRITES.SCALE;
+            if (Util.overlap(playerX, playerW, sprite.offset + spriteW / 2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
+                var oldSpeed = speed;
+                speed = speedCap / 5;
+                position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // Crashes to an obstacle
+                if (!crashToObstacle) {
+                    crashToObstacle = true;
+                    timeSinceCrash = 0;
+                    Game.playCrashSound();
+                    durability -= Math.floor(oldSpeed / maxSpeed * 20);
+                    if (durability <= 0) {
+                        wrecked = true;
+                        hasControl = false;
+                        finishedPlace = cars.length + 1;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
+function handlePassOrCrash(playerSegment, playerW) {
+    for (n = 0; n < playerSegment.cars.length; n++) {
+        car = playerSegment.cars[n];
+        carW = car.sprite.w * SPRITES.SCALE;
+        if (speed > car.speed) {
+            if (place === car.place + 1) {
+                place -= 1;
+                car.place += 1;
+            }
+            if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
+                var oldSpeed = speed;
+                speed = car.speed * (car.speed / speed);
+                position = Util.increase(car.z, -playerZ, trackLength); // Crashes to another vehicle
+                if (!crashToObstacle) {
+                    crashToObstacle = true;
+                    timeSinceCrash = 0;
+                    Game.playCrashSound();
+                    durability -= Math.floor(oldSpeed / car.speed * 5);
+                    if (durability <= 0) {
+                        wrecked = true;
+                        hasControl = false;
+                        finishedPlace = cars.length + 1;
+                    }
+                }
+                break;
+            }
+        }
+        else if (speed <= car.speed && place === car.place - 1) {
+            place += 1;
+            car.place -= 1;
+        }
+    }
+}
+
+function updateBackground(playerSegment, startPosition) {
+    skyOffset = Util.increase(skyOffset, skySpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
+    hillOffset = Util.increase(hillOffset, hillSpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
+    treeOffset = Util.increase(treeOffset, treeSpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
+}
+
+function handleLapChange(dt, startPosition) {
+    if (position > playerZ) {
+        if (currentLapTime && (startPosition < playerZ)) {
+            lap++;
+            if (laps > 0 && lap > laps) {
+                finished = true;
+                hasControl = false;
+                finishedPlace = place;
+                if (captureActions) {
+                    finishCapture();
+                    uploadCapture();
+                }
+            }
+            lastLapTime = currentLapTime;
+            currentLapTime = 0;
+            if (fastLapTime === 0 || lastLapTime <= fastLapTime) {
+                fastLapTime = lastLapTime;
+            }
+        }
+        else {
+            currentLapTime += dt;
+        }
+    }
+}
+
 function update(dt) {
     if (paused) {
         // Skip everything
     }
     else if (playing) {
-        var n, car, carW, sprite, spriteW;
         var playerSegment = findSegment(position + playerZ);
         var playerW = 80 * SPRITES.SCALE;
         var speedPercent = speed / speedCap;
-        var dx = dt * turning * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
         var startPosition = position;
+        if (!place) { place = cars.length + 1; }
 
+        handleContinue();
+        
         updateCars(dt, playerSegment, playerW);
 
-        position = Util.increase(position, dt * speed, trackLength);
-
-        if (finished || wrecked) {
-            if (continueCountdown <= continueCount) {
-                location.href = "../free_play/free_play.html";
-            }
-            else {
-                continueCountdown--;
-            }
-        }
-
-        if (!place) {
-            place = cars.length + 1;
-        }
-
-        if (crashToObstacle && timeSinceCrash < crashTimer) {
-            timeSinceCrash++;
-        }
-        else if (crashToObstacle && timeSinceCrash >= crashTimer) {
-            crashToObstacle = false;
-            timeSinceCrash = 0;
-        }
+        updateCrashTimer();
 
         if (hasControl) {
-            if (captureActions) {
+            if (captureActions)
                 updateCapture();
-            }
-
-            if (keyLeft)
-                playerX = playerX - dx;
-            else if (keyRight)
-                playerX = playerX + dx;
-
-            playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
-
-            if (keyFaster)
-                speed = Util.accelerate(speed, accel, dt);
-            else if (keySlower)
-                speed = Util.accelerate(speed, breaking, dt);
-            else
-                speed = Util.accelerate(speed, decel, dt);
+            updatePlayerPos(dt, playerSegment, speedPercent);
         }
-        else {
+        else
             speed = Util.accelerate(speed, breaking, dt);
-        }
-        
 
-        if ((playerX < -1) || (playerX > 1)) {
+        handleOffRoad(dt, playerSegment, playerW);
 
-            if (speed > offRoadLimit)
-                speed = Util.accelerate(speed, offRoadDecel, dt);
+        handlePassOrCrash(playerSegment, playerW);
 
-            for (n = 0; n < playerSegment.sprites.length; n++) {
-                sprite = playerSegment.sprites[n];
-                spriteW = sprite.source.w * SPRITES.SCALE;
-                if (Util.overlap(playerX, playerW, sprite.offset + spriteW / 2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
-                    var oldSpeed = speed;
-                    speed = speedCap / 5;
-                    position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // Crashes to an obstacle
-                    if (!crashToObstacle) {
-                        crashToObstacle = true;
-                        timeSinceCrash = 0;
-                        Game.playCrashSound();
-                        durability -= Math.floor(oldSpeed/maxSpeed*20);
-                        if (durability <= 0) {
-                            wrecked = true;
-                            hasControl = false;
-                            finishedPlace = cars.length+1;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+        updateBackground(playerSegment, startPosition);
 
-        for (n = 0; n < playerSegment.cars.length; n++) {
-            car = playerSegment.cars[n];
-            carW = car.sprite.w * SPRITES.SCALE;
-            if (speed > car.speed) {
-                if (place === car.place + 1) {
-                    place -= 1;
-                    car.place += 1;
-                }
-                if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
-                    var oldSpeed = speed;
-                    speed = car.speed * (car.speed / speed);
-                    position = Util.increase(car.z, -playerZ, trackLength); // Crashes to another vehicle
-                    if (!crashToObstacle) {
-                        crashToObstacle = true;
-                        timeSinceCrash = 0;
-                        Game.playCrashSound();
-                        durability -= Math.floor(oldSpeed / car.speed * 5);
-                        if (durability <= 0) {
-                            wrecked = true;
-                            hasControl = false;
-                            finishedPlace = cars.length+1;
-                        }
-                    }
-                    break;
-                }
-            }
-            else if (speed <= car.speed && place === car.place - 1) {
-                place += 1;
-                car.place -= 1;
-            }
-        }
-
-        playerX = Util.limit(playerX, -3, 3);     // dont ever let it go too far out of bounds
-        speed = Util.limit(speed, 0, maxSpeed); // or exceed maxSpeed
-
-        skyOffset = Util.increase(skyOffset, skySpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
-        hillOffset = Util.increase(hillOffset, hillSpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
-        treeOffset = Util.increase(treeOffset, treeSpeed * playerSegment.curve * (position - startPosition) / segmentLength, 1);
-
-        if (position > playerZ) {
-            if (currentLapTime && (startPosition < playerZ)) {
-                lap++;
-                if (laps > 0 && lap > laps) {
-                    finished = true;
-                    hasControl = false;
-                    finishedPlace = place;
-                    if (captureActions) {
-                        finishCapture();
-                        uploadCapture();
-                    }
-                }
-                lastLapTime = currentLapTime;
-                currentLapTime = 0;
-                if (fastLapTime === 0 || lastLapTime <= fastLapTime) {
-                    fastLapTime = lastLapTime;
-                }
-            }
-            else {
-                currentLapTime += dt;
-            }
-        }
+        handleLapChange(dt, startPosition);
 
         updateEngineSound(speedPercent);
     }
@@ -256,15 +277,15 @@ function resetCars() {
         // Make every car start at the startline (that's why 0)
         z = Math.floor(0 * segments.length) * segmentLength;
         sprite = Util.randomChoice(SPRITES.CARS);
-        calc = Math.random() * (oCarSpeedTop-oCarSpeedLow) + oCarSpeedLow;
+        calc = Math.random() * (oCarSpeedTop - oCarSpeedLow) + oCarSpeedLow;
         calc = Math.round(calc * 10000) / 10000;
         // Make sure every car is given different speed
         while (calcs.includes(calc)) {
-            calc = Math.random() * (oCarSpeedTop-oCarSpeedLow) + oCarSpeedLow;
+            calc = Math.random() * (oCarSpeedTop - oCarSpeedLow) + oCarSpeedLow;
             calc = Math.round(calc * 10000) / 10000;
         }
         calcs.push(calc);
-        speed = speedCap * (calc/100);
+        speed = speedCap * (calc / 100);
         // Get random name from list
         rand = Math.floor(Math.random() * map.RACER_NAMES.length);
         name = map.RACER_NAMES[rand];
@@ -273,7 +294,7 @@ function resetCars() {
         segment.cars.push(car);
         cars.push(car);
     }
-    cars.sort((a,b) => (a.speed > b.speed) ? -1 : ((b.speed > a.speed) ? 1 : 0))
+    cars.sort((a, b) => (a.speed > b.speed) ? -1 : ((b.speed > a.speed) ? 1 : 0))
     let i = 1;
     cars.forEach(function (car) {
         car.place = i; i++;
@@ -305,7 +326,7 @@ function updateEngineSound(speedPercent) {
         engineSound1.currentTime = 0;
         engineSound1.play();
     }
-    engineSound1.volume *= volume/100;
+    engineSound1.volume *= volume / 100;
 
     engineSound2.playbackRate = speedPercent * 5 + 2;
     var buffer = 0.2;
@@ -313,7 +334,7 @@ function updateEngineSound(speedPercent) {
         engineSound2.currentTime = 0;
         engineSound2.play();
     }
-    engineSound2.volume *= volume/100;
+    engineSound2.volume *= volume / 100;
 
     engineSound3.playbackRate = speedPercent * 2 + 1;
     var buffer = 1;
@@ -321,7 +342,7 @@ function updateEngineSound(speedPercent) {
         engineSound3.currentTime = 0;
         engineSound3.play();
     }
-    engineSound3.volume *= volume/100;
+    engineSound3.volume *= volume / 100;
 
     engineSound4.volume = speedPercent / 3;
     var buffer = 0.5;
@@ -329,7 +350,7 @@ function updateEngineSound(speedPercent) {
         engineSound4.currentTime = 0;
         engineSound4.play();
     }
-    engineSound4.volume *= volume/100;
+    engineSound4.volume *= volume / 100;
 }
 
 function muteSound() {
@@ -339,6 +360,6 @@ function muteSound() {
 }
 
 function updateSound() {
-    music.volume = 1.0 * volume/100
-    updateEngineSound(speed/maxSpeed);
+    music.volume = 1.0 * volume / 100
+    updateEngineSound(speed / maxSpeed);
 }
