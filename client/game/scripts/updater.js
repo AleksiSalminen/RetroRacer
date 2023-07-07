@@ -40,6 +40,10 @@ function update(dt) {
         }
 
         if (hasControl) {
+            if (captureActions) {
+                updateCapture();
+            }
+
             if (keyLeft)
                 playerX = playerX - dx;
             else if (keyRight)
@@ -133,6 +137,10 @@ function update(dt) {
                     finished = true;
                     hasControl = false;
                     finishedPlace = place;
+                    if (captureActions) {
+                        finishCapture();
+                        uploadCapture();
+                    }
                 }
                 lastLapTime = currentLapTime;
                 currentLapTime = 0;

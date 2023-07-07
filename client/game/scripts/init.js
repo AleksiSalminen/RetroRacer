@@ -8,6 +8,14 @@ var mapScript = document.createElement("script");
 mapScript.src = "./maps/" + mapID + "/map.js";
 document.body.appendChild(mapScript);
 
+var apiScript = document.createElement("script");
+apiScript.src = "./scripts/api.js";
+document.body.appendChild(apiScript);
+
+var actionCaptureScript = document.createElement("script");
+actionCaptureScript.src = "./scripts/action_capture.js";
+document.body.appendChild(actionCaptureScript);
+
 var handlerScript = document.createElement("script");
 handlerScript.src = "./scripts/handler.js";
 document.body.appendChild(handlerScript);

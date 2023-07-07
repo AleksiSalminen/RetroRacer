@@ -7,7 +7,9 @@ var MODES = {
   time_trial: "Time Trial"
 }
 
-var mode, laps, playerSpeedPercent, oCarSpeedLow, oCarSpeedTop, totalCars;
+var captureActions = true;
+
+var map, mode, laps, playerSpeedPercent, oCarSpeedLow, oCarSpeedTop, totalCars;
 var term, value;
 var searchParams = window.location.search.substring(1).split('&');
 searchParams.forEach((param) => {
