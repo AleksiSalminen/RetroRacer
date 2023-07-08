@@ -1,29 +1,32 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link href="./styles/game.css" rel="stylesheet" type="text/css" />
-</head> 
 
-<body> 
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="./styles/game.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
   <div id="racer">
     <div id="hud">
       <span id="mainMenu" class="hud"><button><a href="../free_play/free_play.html">
-        MAIN MENU
-      </a></button></span>
+            MAIN MENU
+          </a></button></span>
       <span id="restart" class="hud"><button><a id="restartLink">
-        RESTART
-      </a></button></span>
+            RESTART
+          </a></button></span>
       <span id="settingsToggle" class="hud"><button onclick="Dom.showSettings();">
-        SETTINGS
-      </button></span>
-      <span id="motionBlurSpan" class="hud" style="display:none"><button id="motionBlur" style="display:none" onclick="toggleMotionBlur();">
-        MOTION BLUR: ON
-      </button></span>
-      <span id="screenShakeSpan" class="hud" style="display:none"><button id="screenShake" style="display:none" onclick="toggleScreenShake();">
-        SCREEN SHAKE: ON
-      </button></span>
+          SETTINGS
+        </button></span>
+      <span id="motionBlurSpan" class="hud" style="display:none"><button id="motionBlur" style="display:none"
+          onclick="toggleMotionBlur();">
+          MOTION BLUR: ON
+        </button></span>
+      <span id="screenShakeSpan" class="hud" style="display:none"><button id="screenShake" style="display:none"
+          onclick="toggleScreenShake();">
+          SCREEN SHAKE: ON
+        </button></span>
       <span id="volumeSpan" class="hud" style="display:none">
         <button id="muteButton" style="height:18px" onclick="muteSound();">
           <span id="volumeTitle">VOLUME:</span>
@@ -35,13 +38,15 @@
       This game cannot be run because your browser does not support the &lt;HTML Canvas&gt; element
     </canvas>
   </div>
-  
+
 
   <!-- Maps -->
+  <!--
   <script src="./maps/razormist_demo/map.js"></script>
   <script src="./maps/city/map.js"></script>
-  <script src="./maps/maps.js"></script>
+  <script src="./maps/maps.js"></script>-->
   <!-- Scripts -->
+  <!--
   <script src="./scripts/api.js"></script>
   <script src="./scripts/action_capture.js"></script>
   <script src="./scripts/helper.js"></script>
@@ -52,6 +57,7 @@
   <script src="./scripts/config.js"></script>
   <script src="./scripts/game.js"></script>
   <script src="./scripts/smoke.js"></script>
-
+  -->
+  <script type="module" src="./modules/game.js"></script>
 </body> 
 </html>
